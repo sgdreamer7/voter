@@ -20,6 +20,7 @@ class SignIn extends Component {
   }
 
   onChangeInput = e => {
+    console.log(e.target.name)
     this.setState({
       [e.target.name]: e.target.value
     });
@@ -68,7 +69,7 @@ class SignIn extends Component {
                 type="password"
                 name="password"
                 margin="normal"
-                value={this.state.email}
+                value={this.state.password}
                 onChange={this.onChangeInput}
               />
               <Button
