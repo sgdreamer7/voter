@@ -1,0 +1,24 @@
+{
+  "polls": [
+    {
+      "_id": "1",
+      "question": "This is the question for poll #1, please answer it",
+      "isVoted": false
+    },
+    {
+      "_id": "2",
+      "question": "This is the question for poll #2, please answer it",
+      "isVoted": true
+    },
+    {
+      "_id": "3",
+      "question": "This is the question for poll #3, please answer it",
+      "isVoted": true
+    },
+    {
+      "_id": "4",
+      "question": "This is the question for poll #4, please answer it",
+      "isVoted": false
+    }
+  ]
+}

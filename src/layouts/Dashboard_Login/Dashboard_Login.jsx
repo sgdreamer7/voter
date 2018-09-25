@@ -91,7 +91,7 @@ class App extends React.Component {
       <div className={classes.wrapper}>
         <Sidebar
           routes={isAuthenticated ? dashboardRoutes : loginRoutes}
-          logoText={"Voter"}
+          logoText="Voter"
           logo={logo}
           image={image}
           handleDrawerToggle={this.handleDrawerToggle}
