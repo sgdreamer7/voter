@@ -3,8 +3,7 @@ import Dashboard from "@material-ui/icons/Dashboard";
 import InsertDriveFile from "@material-ui/icons/InsertDriveFile";
 // core components/views
 import DashboardPage from "views/Dashboard/Dashboard.jsx";
-import UserProfile from "views/UserProfile/UserProfile.jsx";
-import TableList from "views/TableList/TableList.jsx";
+import CreateNewPoll from "views/CreateNewPoll";
 
 const dashboardRoutes = [
   {
@@ -19,14 +18,14 @@ const dashboardRoutes = [
     sidebarName: "Poll",
     navbarName: "Poll",
     icon: InsertDriveFile,
-    component: UserProfile
+    component: CreateNewPoll
   },
   {
     path: "/create",
     sidebarName: "Create",
     navbarName: "Create",
     icon: InsertDriveFile,
-    component: TableList
+    component: CreateNewPoll
   },
   { redirect: true, path: "/", to: "/dashboard", navbarName: "Redirect" }
 ];

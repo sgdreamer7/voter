@@ -1,8 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { Router, Route, Switch } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 
 import { Provider } from "react-redux";
+import { ConnectedRouter } from "react-router-redux";
 import configureStore, { history } from "./store/configureStore";
 import "assets/css/material-dashboard-react.css?v=1.5.0";
 import "assets/css/styles.css";
@@ -13,7 +14,7 @@ const store = configureStore();
 
 const app = (
   <Provider store={store}>
-    <Router history={history}>
+    <ConnectedRouter history={history}>
       <Switch>
         {indexRoutes.map((prop, key) => {
           return (
@@ -21,7 +22,7 @@ const app = (
           );
         })}
       </Switch>
-    </Router>
+    </ConnectedRouter>
   </Provider>
 );
 

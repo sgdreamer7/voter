@@ -111,7 +111,14 @@ class Dashboard extends React.Component {
           <CardBody>
             <List>
               {this.props.polls.map((poll, i) => (
-                <ListItem key={i} className="polls-item">
+                <ListItem
+                  key={i}
+                  className="polls-item"
+                  divider={true}
+                  style={{
+                    margin: "5px"
+                  }}
+                >
                   <Link to={`/poll/${poll._id}`} className="polls-item-link">
                     {poll.question}
                   </Link>
