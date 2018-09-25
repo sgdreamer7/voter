@@ -10,23 +10,23 @@ import Button from "@material-ui/core/Button";
 import withStyles from "@material-ui/core/styles/withStyles";
 import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
 
-class SignIn extends Component {
+class EmailVerification extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "",
-      password: ""
+      email: "test@gmail.com",
+      verificationCode: ""
     };
   }
+
+  onSubmit = e => {
+    e.preventDefault();
+  };
 
   onChangeInput = e => {
     this.setState({
       [e.target.name]: e.target.value
     });
-  };
-
-  onSubmit = e => {
-    e.preventDefault();
   };
 
   render() {
@@ -52,31 +52,29 @@ class SignIn extends Component {
                   color: "#fff"
                 }}
               >
-                Sign into Voter App
+                Email verification to finish registration with Voter App
               </Typography>
-              <p className="form__subtitle">
-                Please, enter your email and password
-              </p>
+              <p className="form__subtitle">Please, confirm email address</p>
             </div>
             <div className="form__content">
               <TextField
+                disabled
                 id="email-input"
-                label="Email"
+                label="Email address"
                 className={classes.textField}
                 value={this.state.email}
-                onChange={this.onChangeInput}
                 type="email"
                 name="email"
                 margin="normal"
               />
               <TextField
-                id="password-input"
-                label="Password"
+                id="verification-code-input"
+                label="VerificationCode"
                 className={classes.textField}
-                type="password"
-                name="password"
+                type="text"
+                name="verificationCode"
                 margin="normal"
-                value={this.state.password}
+                value={this.state.verificationCode}
                 onChange={this.onChangeInput}
               />
               <Button
@@ -92,18 +90,18 @@ class SignIn extends Component {
                 }}
                 className={classes.submit}
               >
-                Sign in
+                Verify email
               </Button>
             </div>
           </form>
-          <Link to="/signUp">first time user? sign-up</Link>
+          <Link to="/signUp">already have an account? sign-in</Link>
         </Paper>
       </div>
     );
   }
 }
-SignIn.propTypes = {
+EmailVerification.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(dashboardStyle)(SignIn);
+export default withStyles(dashboardStyle)(EmailVerification);

@@ -3,6 +3,8 @@ import Person from "@material-ui/icons/Person";
 // import ContentPaste from "@material-ui/icons/ContentPaste";
 // core components/views
 import SignInPage from "../views/SignIn";
+import SignUpPage from "../views/SignUp";
+import EmailVerificaiton from "../views/EmailVerification";
 
 const loginRoutes = [
   {
@@ -17,7 +19,14 @@ const loginRoutes = [
     sidebarName: "Sign Up",
     navbarName: "Sign Up",
     icon: Person,
-    component: SignInPage
+    component: SignUpPage
+  },
+  {
+    path: "/verifyEmail",
+    sidebarName: "Email verification",
+    navbarName: "Email verification",
+    icon: Person,
+    component: EmailVerificaiton
   },
   { redirect: true, path: "/", to: "/signIn", navbarName: "Redirect" }
 ];

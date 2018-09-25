@@ -11,6 +11,25 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
 
 class SignUp extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: "",
+      password: "",
+      password2: ""
+    };
+  }
+
+  onChangeInput = e => {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  };
+
+  onSubmit = e => {
+    e.preventDefault();
+  };
+
   render() {
     const { classes } = this.props;
     return (
@@ -22,7 +41,11 @@ class SignUp extends Component {
             width: "70%"
           }}
         >
-          <form noValidate className={(classes.form, "form")}>
+          <form
+            noValidate
+            className={(classes.form, "form")}
+            onSubmit={this.onSubmit}
+          >
             <div className="form__header">
               <Typography
                 variant="headline"
@@ -30,7 +53,7 @@ class SignUp extends Component {
                   color: "#fff"
                 }}
               >
-                Sign into Voter App
+                Register with Voter App
               </Typography>
               <p className="form__subtitle">
                 Please, enter your email and password
@@ -39,10 +62,13 @@ class SignUp extends Component {
             <div className="form__content">
               <TextField
                 id="email-input"
-                label="Email"
+                label="Email address"
                 className={classes.textField}
                 type="email"
                 margin="normal"
+                name="email"
+                value={this.state.email}
+                onChange={this.onChangeInput}
               />
               <TextField
                 id="password-input"
@@ -50,6 +76,19 @@ class SignUp extends Component {
                 className={classes.textField}
                 type="password"
                 margin="normal"
+                name="password"
+                value={this.state.password}
+                onChange={this.onChangeInput}
+              />
+              <TextField
+                id="password2-input"
+                label="Repeat password"
+                className={classes.textField}
+                type="password2"
+                margin="normal"
+                name="password2"
+                value={this.state.password2}
+                onChange={this.onChangeInput}
               />
               <Button
                 type="submit"
@@ -58,15 +97,17 @@ class SignUp extends Component {
                   backgroundColor: "#9c27b0",
                   color: "white",
                   alignSelf: "flex-start",
-                  marginTop: "10px"
+                  marginTop: "30px",
+                  marginBottom: "10px",
+                  textTransform: "uppercase"
                 }}
                 className={classes.submit}
               >
-                Sign in
+                Sign up
               </Button>
             </div>
           </form>
-          <Link to="/signUp">first time user? sign-up</Link>
+          <Link to="/signIn">already have an account? sign-in</Link>
         </Paper>
       </div>
     );

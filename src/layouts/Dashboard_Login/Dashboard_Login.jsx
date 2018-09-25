@@ -91,7 +91,7 @@ class App extends React.Component {
       <div className={classes.wrapper}>
         <Sidebar
           routes={isAuthenticated ? dashboardRoutes : loginRoutes}
-          logoText={"Creative Tim"}
+          logoText={"Voter"}
           logo={logo}
           image={image}
           handleDrawerToggle={this.handleDrawerToggle}
@@ -117,7 +117,9 @@ class App extends React.Component {
               {switchRoutes(this.props.isAuthenticated)}
             </div>
           )}
-          {this.getRoute() ? <Footer /> : null}
+          {this.getRoute() ? (
+            <Footer routes={isAuthenticated ? dashboardRoutes : loginRoutes} />
+          ) : null}
         </div>
       </div>
     );

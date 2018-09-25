@@ -25,19 +25,14 @@ const Sidebar = ({ ...props }) => {
   var links = (
     <List className={classes.list}>
       {routes.map((prop, key) => {
-        if (prop.redirect) return null;
+        if (prop.redirect || prop.path === "/verifyEmail") return null;
         var activePro = " ";
         var listItemClasses;
-        if (prop.path === "/upgrade-to-pro") {
-          activePro = classes.activePro + " ";
-          listItemClasses = classNames({
-            [" " + classes[color]]: true
-          });
-        } else {
-          listItemClasses = classNames({
-            [" " + classes[color]]: activeRoute(prop.path)
-          });
-        }
+
+        listItemClasses = classNames({
+          [" " + classes[color]]: activeRoute(prop.path)
+        });
+
         const whiteFontClasses = classNames({
           [" " + classes.whiteFont]: activeRoute(prop.path)
         });
@@ -69,7 +64,7 @@ const Sidebar = ({ ...props }) => {
   );
   var brand = (
     <div className={classes.logo}>
-      <a href="https://www.creative-tim.com" className={classes.logoLink}>
+      <a href="/" className={classes.logoLink}>
         <div className={classes.logoImage}>
           <img src={logo} alt="logo" className={classes.img} />
         </div>
@@ -129,7 +124,15 @@ const Sidebar = ({ ...props }) => {
 };
 
 Sidebar.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  color: PropTypes.string,
+  logo: PropTypes.string,
+  image: PropTypes.string,
+  logoText: PropTypes.string,
+  routes: PropTypes.array,
+  location: PropTypes.object,
+  open: PropTypes.bool,
+  handleDrawerToggle: PropTypes.func
 };
 
 export default withStyles(sidebarStyle)(Sidebar);

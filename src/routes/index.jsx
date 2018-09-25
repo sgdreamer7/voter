@@ -1,5 +1,5 @@
-import Dashboard from "layouts/Dashboard/Dashboard.jsx";
+import DashboardLoginLayout from "layouts/Dashboard_Login/Dashboard_Login.jsx";
 
-const indexRoutes = [{ path: "/", component: Dashboard }];
+const indexRoutes = [{ path: "/", component: DashboardLoginLayout }];
 
 export default indexRoutes;
