@@ -19,16 +19,15 @@ import Cancel from "@material-ui/icons/Cancel";
 import withStyles from "@material-ui/core/styles/withStyles";
 import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
 
+import EditPollModal from "./EditModal";
+
 class CreateNewPoll extends Component {
   state = {
     question: "",
-    openModal: false,
-    answers: [
-      {
-        text: "This is the answer #1 for the Question",
-        order: 1
-      }
-    ]
+    openDeleteModal: false,
+    openEditModal: false,
+    currentEditAnswerIndex: null,
+    answers: ["This is the answer #1 for the Question"]
   };
 
   onChangeInput = e => {
@@ -37,12 +36,79 @@ class CreateNewPoll extends Component {
     });
   };
 
-  handleOpen = () => {
-    this.setState({ openModal: true });
+  onChangeAnserInput = answer => {
+    this.setState(
+      prevState => {
+        let answers = [...prevState.answers];
+        answers[prevState.currentEditAnswerIndex] = answer;
+        return {
+          answers
+        };
+      },
+      () => {
+        this.handleModalClose("openEditModal");
+      }
+    );
   };
 
-  handleClose = () => {
-    this.setState({ openModal: false });
+  handleModalOpen = (modal, ind) => {
+    this.setState({ [modal]: true, currentEditAnswerIndex: ind });
+  };
+
+  handleModalClose = open => {
+    this.setState({ [open]: false });
+  };
+
+  deletePoll = () => {
+    this.setState(
+      prevState => {
+        let answers = prevState.answers.slice();
+        answers.splice(prevState.currentEditAnswerIndex, 1);
+        return {
+          answers
+        };
+      },
+      () => {
+        this.handleModalClose("openDeleteModal");
+      }
+    );
+  };
+
+  addAnswer = () => {
+    this.setState(prevState => {
+      let newAnser = "";
+      return {
+        answers: [...prevState.answers, newAnser]
+      };
+    });
+  };
+
+  movePollUp = ind => {
+    this.setState(prevState => {
+      let answers = prevState.answers.slice();
+      let answerToMove = answers.splice(ind, 1);
+      let indexMove = this.getIndex(ind - 1);
+      answers.splice(indexMove, 0, answerToMove[0]);
+      return {
+        answers
+      };
+    });
+  };
+
+  movePollDown = ind => {
+    this.setState(prevState => {
+      let answers = prevState.answers.slice();
+      let answerToMove = answers.splice(ind, 1);
+      let indexMove = this.getIndex(ind + 1);
+      answers.splice(indexMove, 0, answerToMove[0]);
+      return {
+        answers
+      };
+    });
+  };
+
+  getIndex = n => {
+    return (n + this.state.answers.length) % this.state.answers.length;
   };
 
   render() {
@@ -50,7 +116,11 @@ class CreateNewPoll extends Component {
     const styleModal = {
       top: "50%",
       left: "50%",
-      position: "absolute"
+      position: "absolute",
+      transform: "translate(-50%, -50%)",
+      background: "#fff",
+      border: "1px solid #ccc",
+      padding: "20px"
     };
 
     return (
@@ -98,7 +168,18 @@ class CreateNewPoll extends Component {
                       justifyContent: "space-between"
                     }}
                   >
-                    <div className="answers__text">{answer.text}</div>
+                    <div
+                      className="answers__text"
+                      onClick={() => this.handleModalOpen("openEditModal", ind)}
+                    >
+                      {answer !== "" ? (
+                        answer
+                      ) : (
+                        <span style={{ color: "gray" }}>
+                          Please click to edit this field
+                        </span>
+                      )}
+                    </div>
                     <div className="answers__controls">
                       <Button
                         justIcon
@@ -106,6 +187,7 @@ class CreateNewPoll extends Component {
                         style={{
                           padding: "12px 30px"
                         }}
+                        onClick={() => this.movePollUp(ind)}
                       >
                         <ArrowUpward />
                       </Button>
@@ -115,6 +197,7 @@ class CreateNewPoll extends Component {
                         style={{
                           padding: "12px 30px"
                         }}
+                        onClick={() => this.movePollDown(ind)}
                       >
                         <ArrowDownward />
                       </Button>
@@ -124,7 +207,9 @@ class CreateNewPoll extends Component {
                         style={{
                           padding: "12px 30px"
                         }}
-                        onClick={this.handleOpen}
+                        onClick={() =>
+                          this.handleModalOpen("openDeleteModal", ind)
+                        }
                       >
                         <Cancel />
                       </Button>
@@ -133,26 +218,60 @@ class CreateNewPoll extends Component {
                 ))}
               </List>
             </div>
-            <Button color="primary">Add answer</Button>
+            <Button color="primary" onClick={this.addAnswer}>
+              Add answer
+            </Button>
           </CardBody>
         </Card>
         <Modal
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"
-          open={this.state.openModal}
-          onClose={this.handleClose}
+          open={this.state.openDeleteModal}
+          onClose={() => this.handleModalClose("openDeleteModal")}
         >
           <div style={styleModal} className={classes.paper}>
-            <Typography variant="title" id="modal-title">
-              Are you sure, you wanna delete this poll?
+            <Typography
+              variant="title"
+              id="modal-title"
+              style={{
+                margin: "20px 0"
+              }}
+            >
+              Are you sure you want to delete this poll?
             </Typography>
-            <Button color="danger">DELETE</Button>
-            <Button color="info">Cancel</Button>
+            <div
+              className="buttons"
+              style={{
+                display: "flex",
+                justifyContent: "space-between"
+              }}
+            >
+              <Button
+                color="info"
+                onClick={() => this.handleModalClose("openDeleteModal")}
+              >
+                Cancel
+              </Button>
+              <Button color="danger" onClick={this.deletePoll}>
+                DELETE
+              </Button>
+            </div>
           </div>
         </Modal>
+        <EditPollModal
+          answer={this.state.answers[this.state.currentEditAnswerIndex]}
+          key={this.state.openEditModal}
+          open={this.state.openEditModal}
+          handleClose={() => this.handleModalClose("openEditModal")}
+          handleEdit={this.onChangeAnserInput}
+        />
       </div>
     );
   }
 }
+
+CreateNewPoll.propTypes = {
+  classes: PropTypes.object.isRequired
+};
 
 export default connect()(withStyles(dashboardStyle)(CreateNewPoll));

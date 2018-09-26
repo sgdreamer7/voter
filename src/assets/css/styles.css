@@ -39,3 +39,8 @@
   color: #fff;
   background-color: #a09d9d;
 }
+
+.answers__text {
+  flex-grow: 1;
+  margin-right: 10px;
+}
