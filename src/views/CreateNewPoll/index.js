@@ -27,7 +27,7 @@ class CreateNewPoll extends Component {
     openDeleteModal: false,
     openEditModal: false,
     currentEditAnswerIndex: null,
-    answers: ["This is the answer #1 for the Question"]
+    answers: []
   };
 
   onChangeInput = e => {
@@ -170,6 +170,9 @@ class CreateNewPoll extends Component {
                   >
                     <div
                       className="answers__text"
+                      style={{
+                        cursor: "pointer"
+                      }}
                       onClick={() => this.handleModalOpen("openEditModal", ind)}
                     >
                       {answer !== "" ? (
