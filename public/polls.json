@@ -3,22 +3,94 @@
     {
       "_id": "1",
       "question": "This is the question for poll #1, please answer it",
-      "isVoted": false
+      "isVoted": false,
+      "answers": [
+        {
+          "_id": "1",
+          "answer": "Some answer #1"
+        },
+        {
+          "_id": "2",
+          "answer": "Some answer #2"
+        },
+        {
+          "_id": "3",
+          "answer": "Some answer #3"
+        },
+        {
+          "_id": "4",
+          "answer": "Some answer #4"
+        }
+      ]
     },
     {
       "_id": "2",
       "question": "This is the question for poll #2, please answer it",
-      "isVoted": true
+      "isVoted": true,
+      "answers": [
+        {
+          "_id": "1",
+          "answer": "Some answer #1"
+        },
+        {
+          "_id": "2",
+          "answer": "Some answer #2"
+        },
+        {
+          "_id": "3",
+          "answer": "Some answer #3"
+        },
+        {
+          "_id": "4",
+          "answer": "Some answer #4"
+        }
+      ]
     },
     {
       "_id": "3",
       "question": "This is the question for poll #3, please answer it",
-      "isVoted": true
+      "isVoted": true,
+      "answers": [
+        {
+          "_id": "1",
+          "answer": "Some answer #1"
+        },
+        {
+          "_id": "2",
+          "answer": "Some answer #2"
+        },
+        {
+          "_id": "3",
+          "answer": "Some answer #3"
+        },
+        {
+          "_id": "4",
+          "answer": "Some answer #4"
+        }
+      ]
     },
     {
       "_id": "4",
       "question": "This is the question for poll #4, please answer it",
-      "isVoted": false
+      "isVoted": false,
+      "answers": [
+        {
+          "_id": "1",
+          "answer": "Some answer #1"
+        },
+        {
+          "_id": "2",
+          "answer": "Some answer #2"
+        },
+        {
+          "_id": "3",
+          "answer": "Some answer #3"
+        },
+        {
+          "_id": "4",
+          "answer": "Some answer #4"
+        }
+      ]
     }
   ]
 }

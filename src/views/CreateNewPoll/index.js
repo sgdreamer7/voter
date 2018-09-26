@@ -39,8 +39,8 @@ class CreateNewPoll extends Component {
   onChangeAnserInput = answer => {
     this.setState(
       prevState => {
-        let answers = [...prevState.answers];
-        answers[prevState.currentEditAnswerIndex] = answer;
+        let answers = prevState.answers.map(answer => ({ ...answer }));
+        answers[prevState.currentEditAnswerIndex].answer = answer;
         return {
           answers
         };
@@ -76,7 +76,9 @@ class CreateNewPoll extends Component {
 
   addAnswer = () => {
     this.setState(prevState => {
-      let newAnser = "";
+      let newAnser = {
+        answer: ""
+      };
       return {
         answers: [...prevState.answers, newAnser]
       };
@@ -175,8 +177,8 @@ class CreateNewPoll extends Component {
                       }}
                       onClick={() => this.handleModalOpen("openEditModal", ind)}
                     >
-                      {answer !== "" ? (
-                        answer
+                      {answer.answer !== "" ? (
+                        answer.answer
                       ) : (
                         <span style={{ color: "gray" }}>
                           Please click to edit this field
@@ -262,7 +264,11 @@ class CreateNewPoll extends Component {
           </div>
         </Modal>
         <EditPollModal
-          answer={this.state.answers[this.state.currentEditAnswerIndex]}
+          answer={
+            this.state.currentEditAnswerIndex !== null
+              ? this.state.answers[this.state.currentEditAnswerIndex].answer
+              : ""
+          }
           key={this.state.openEditModal}
           open={this.state.openEditModal}
           handleClose={() => this.handleModalClose("openEditModal")}

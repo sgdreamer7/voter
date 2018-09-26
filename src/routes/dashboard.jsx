@@ -2,8 +2,9 @@
 import Dashboard from "@material-ui/icons/Dashboard";
 import InsertDriveFile from "@material-ui/icons/InsertDriveFile";
 // core components/views
-import DashboardPage from "views/Dashboard/Dashboard.jsx";
-import CreateNewPoll from "views/CreateNewPoll";
+import DashboardPage from "../views/Dashboard/Dashboard.jsx";
+import CreateNewPoll from "../views/CreateNewPoll";
+import Poll from "../views/Poll";
 
 const dashboardRoutes = [
   {
@@ -18,7 +19,7 @@ const dashboardRoutes = [
     sidebarName: "Poll",
     navbarName: "Poll",
     icon: InsertDriveFile,
-    component: CreateNewPoll
+    component: Poll
   },
   {
     path: "/create",
