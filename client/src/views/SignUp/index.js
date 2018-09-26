@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 
 import TextField from "@material-ui/core/TextField";
 import Card from "components/Card/Card.jsx";
@@ -12,13 +13,16 @@ import Button from "@material-ui/core/Button";
 import withStyles from "@material-ui/core/styles/withStyles";
 import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
 
+import { registerUser } from "../../actions/auth";
+
 class SignUp extends Component {
   constructor(props) {
     super(props);
     this.state = {
       email: "",
       password: "",
-      password2: ""
+      password2: "",
+      errors: {}
     };
   }
 
@@ -30,6 +34,11 @@ class SignUp extends Component {
 
   onSubmit = e => {
     e.preventDefault();
+    this.props.registerUser({
+      email: this.state.email,
+      password: this.state.password,
+      password2: this.state.password2
+    });
   };
 
   render() {
@@ -121,7 +130,11 @@ class SignUp extends Component {
   }
 }
 SignUp.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  registerUser: PropTypes.func.isRequired
 };
 
-export default withStyles(dashboardStyle)(SignUp);
+export default connect(
+  null,
+  { registerUser }
+)(withStyles(dashboardStyle)(SignUp));

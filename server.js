@@ -30,6 +30,20 @@ app.use(passport.initialize());
 //Passport config
 require("./config/passport.js")(passport);
 
+app.use(function(req, res, next) {
+  var allowedOrigin = "http://localhost:3000";
+  var origin = req.headers.origin;
+  if (allowedOrigin === origin) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
+  res.header("Access-Control-Allow-Methods", "GET,PATCH,POST,DELETE");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
+
 //Use Routes
 app.use("/api/users", users);
 app.use("/api/polls", polls);
