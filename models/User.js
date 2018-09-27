@@ -9,6 +9,14 @@ const UserSchema = new Schema({
   email: {
     type: String,
     required: true
+  },
+  verifyCode: {
+    type: Number,
+    required: true
+  },
+  confirmed: {
+    type: Boolean,
+    default: false
   }
 });
 

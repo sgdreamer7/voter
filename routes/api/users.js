@@ -5,6 +5,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const keys = require("../../config/keys");
 const passport = require("passport");
+const crypto = require("crypto");
+const format = require("biguint-format");
 
 const validateRegisterInput = require("../../validations/register");
 const validateLoginInput = require("../../validations/login");
@@ -30,10 +32,20 @@ router.post("/signup", (req, res) => {
         bcrypt.genSalt(10, (err, salt) => {
           bcrypt.hash(newUser.password, salt, (err, hash) => {
             if (err) throw err;
+
+            const number = format(crypto.randomBytes(8), "dec");
             newUser.password = hash;
+            newUser.verifyCode = number;
             newUser
               .save()
-              .then(user => res.json(user))
+              .then(user => {
+                console.log(
+                  `http://localhost:3000/verifyEmail?email=${
+                    newUser.email
+                  }&code=${number}`
+                );
+                return res.status(200).json({ success: true });
+              })
               .catch(err => console.log(err));
           });
         });
@@ -52,36 +64,74 @@ router.post("/signin", (req, res) => {
   const password = req.body.password;
 
   User.findOne({ email }).then(user => {
-    errors.email = "User not found";
     if (!user) {
+      errors.email = "User not found";
       return res.status(404).json(errors);
     }
 
     bcrypt.compare(password, user.password).then(isMatch => {
       if (isMatch) {
-        const payload = {
-          id: user.id,
-          name: user.name,
-          avatar: user.avatar
-        };
+        if (user.confirmed) {
+          const payload = {
+            id: user.id,
+            email: user.email
+          };
 
-        jwt.sign(
-          payload,
-          keys.secretOrKey,
-          { expiresIn: 3600 },
-          (err, token) => {
-            res.json({
-              success: true,
-              token: "Bearer " + token
-            });
-          }
-        );
+          jwt.sign(
+            payload,
+            keys.secretOrKey,
+            { expiresIn: 3600 },
+            (err, token) => {
+              return res.json({
+                success: true,
+                token: "Bearer " + token
+              });
+            }
+          );
+        } else {
+          errors.confirmed = "User email not confirmed";
+          return res.status(400).json(errors);
+        }
       } else {
         errors.password = "Password incorrect";
         return res.status(400).json(errors);
       }
     });
   });
+});
+
+router.post("/verifyEmail", (req, res) => {
+  const email = req.body.email;
+  const verifyCode = +req.body.verifyCode;
+
+  User.findOne({ email })
+    .then(user => {
+      if (user.verifyCode === verifyCode) {
+        const payload = {
+          id: user.id,
+          email: user.email
+        };
+
+        user.confirmed = true;
+        user.save().then(user => {
+          jwt.sign(
+            payload,
+            keys.secretOrKey,
+            { expiresIn: 3600 },
+            (err, token) => {
+              return res.json({
+                success: true,
+                token: "Bearer " + token
+              });
+            }
+          );
+        });
+      } else {
+        errors.verifyCode = "Verify code incorrect";
+        return res.status(400).json(errors);
+      }
+    })
+    .catch(err => res.json(err));
 });
 
 router.get(

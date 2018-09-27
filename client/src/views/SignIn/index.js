@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 
 import TextField from "@material-ui/core/TextField";
 import Card from "components/Card/Card.jsx";
@@ -11,6 +12,8 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import withStyles from "@material-ui/core/styles/withStyles";
 import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
+
+import { loginUser } from "../../actions/auth";
 
 class SignIn extends Component {
   constructor(props) {
@@ -29,6 +32,7 @@ class SignIn extends Component {
 
   onSubmit = e => {
     e.preventDefault();
+    this.props.loginUser(this.state);
   };
 
   render() {
@@ -70,10 +74,14 @@ class SignIn extends Component {
                   className={classes.textField}
                   value={this.state.email}
                   onChange={this.onChangeInput}
+                  error={this.props.errors.email}
                   type="email"
                   name="email"
                   margin="normal"
                 />
+                {this.props.errors.email && (
+                  <div className="error-label">{this.props.errors.email}</div>
+                )}
                 <TextField
                   id="password-input"
                   label="Password"
@@ -81,9 +89,20 @@ class SignIn extends Component {
                   type="password"
                   name="password"
                   margin="normal"
+                  error={this.props.errors.password}
                   value={this.state.password}
                   onChange={this.onChangeInput}
                 />
+                {this.props.errors.password && (
+                  <div className="error-label">
+                    {this.props.errors.password}
+                  </div>
+                )}
+                {this.props.errors.confirmed && (
+                  <div className="error-label">
+                    {this.props.errors.confirmed}
+                  </div>
+                )}
                 <Button
                   type="submit"
                   variant="raised"
@@ -109,7 +128,16 @@ class SignIn extends Component {
   }
 }
 SignIn.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  errors: PropTypes.object,
+  loginUser: PropTypes.func.isRequired
 };
 
-export default withStyles(dashboardStyle)(SignIn);
+const mapStateToProps = state => ({
+  errors: state.errors
+});
+
+export default connect(
+  mapStateToProps,
+  { loginUser }
+)(withStyles(dashboardStyle)(SignIn));

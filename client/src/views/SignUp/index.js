@@ -21,8 +21,7 @@ class SignUp extends Component {
     this.state = {
       email: "",
       password: "",
-      password2: "",
-      errors: {}
+      password2: ""
     };
   }
 
@@ -83,7 +82,11 @@ class SignUp extends Component {
                   name="email"
                   value={this.state.email}
                   onChange={this.onChangeInput}
+                  error={!!this.props.errors.email}
                 />
+                {this.props.errors.email && (
+                  <div className="error-label">{this.props.errors.email}</div>
+                )}
                 <TextField
                   id="password-input"
                   label="Password"
@@ -93,17 +96,29 @@ class SignUp extends Component {
                   name="password"
                   value={this.state.password}
                   onChange={this.onChangeInput}
+                  error={!!this.props.errors.password}
                 />
+                {this.props.errors.password && (
+                  <div className="error-label">
+                    {this.props.errors.password}
+                  </div>
+                )}
                 <TextField
                   id="password2-input"
                   label="Repeat password"
                   className={classes.textField}
-                  type="password2"
+                  type="password"
                   margin="normal"
                   name="password2"
                   value={this.state.password2}
                   onChange={this.onChangeInput}
+                  error={!!this.props.errors.password2}
                 />
+                {this.props.errors.password2 && (
+                  <div className="error-label">
+                    {this.props.errors.password2}
+                  </div>
+                )}
                 <Button
                   type="submit"
                   variant="raised"
@@ -131,10 +146,15 @@ class SignUp extends Component {
 }
 SignUp.propTypes = {
   classes: PropTypes.object.isRequired,
-  registerUser: PropTypes.func.isRequired
+  registerUser: PropTypes.func.isRequired,
+  errors: PropTypes.object
 };
 
+const mapStateToProps = state => ({
+  errors: state.errors
+});
+
 export default connect(
-  null,
+  mapStateToProps,
   { registerUser }
 )(withStyles(dashboardStyle)(SignUp));
