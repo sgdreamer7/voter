@@ -6,10 +6,6 @@ const AnswerSchema = new Schema({
     type: String,
     required: true
   },
-  poll: {
-    type: Schema.Types.ObjectId,
-    ref: "polls"
-  },
   order: {
     type: Number,
     required: true

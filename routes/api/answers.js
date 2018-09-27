@@ -24,14 +24,13 @@ router.post(
     Polls.findById(req.params.poll_id).then(poll => {
       const newAnswer = new Answer({
         answer: req.body.answer,
-        order: req.body.order,
-        poll: poll._id
+        order: req.body.order
       })
         .save()
         .then(answer => {
           poll.answers.push(answer);
 
-          poll.save().then(poll => res.json(poll));
+          poll.save().then(poll => res.json(answer));
         });
     });
   }

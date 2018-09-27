@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { SET_POLLS } from "./types";
+import { SET_POLLS, ADD_POLL, EDIT_POLL, GET_ERRORS } from "./types";
 
 export const getPolls = () => dispatch => {
   axios
@@ -12,4 +12,41 @@ export const getPolls = () => dispatch => {
       });
     })
     .catch(err => console.log(err));
+};
+
+export const addPollQuestion = question => dispatch => {
+  return axios
+    .post("polls/new", question)
+    .then(res => {
+      dispatch({
+        type: ADD_POLL,
+        payload: res.data
+      });
+      return res.data;
+    })
+    .catch(err => {
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      });
+    });
+};
+
+export const editPollQuestion = ({ question, id }) => dispatch => {
+  axios
+    .patch(`polls/${id}`, { question })
+    .then(({ data }) => {
+      dispatch({
+        type: EDIT_POLL,
+        id,
+        updates: { question: data.question }
+      });
+    })
+    .catch(err => {
+      console.log(err);
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      });
+    });
 };

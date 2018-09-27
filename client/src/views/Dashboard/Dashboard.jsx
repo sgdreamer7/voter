@@ -34,6 +34,10 @@ class Dashboard extends React.Component {
     );
   };
 
+  componentDidMount() {
+    this.props.getPolls();
+  }
+
   addNewPoll = () => {
     this.props.push("/create");
   };

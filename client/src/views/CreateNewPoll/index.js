@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import debounce from "debounce";
 
 import TextField from "@material-ui/core/TextField";
 import Card from "components/Card/Card.jsx";
@@ -20,13 +21,16 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
 
 import EditPollModal from "./EditModal";
+import { addPollQuestion, editPollQuestion } from "../../actions/polls";
 
 class CreateNewPoll extends Component {
   state = {
     question: "",
+    id: "",
     openDeleteModal: false,
     openEditModal: false,
     currentEditAnswerIndex: null,
+    editMode: false,
     answers: []
   };
 
@@ -34,6 +38,26 @@ class CreateNewPoll extends Component {
     this.setState({
       [e.target.name]: e.target.value
     });
+    this.delayedCallback(this.onSaveQuestionInput);
+  };
+
+  onSaveQuestionInput = () => {
+    if (!this.state.editMode) {
+      this.props
+        .addPollQuestion({
+          question: this.state.question
+        })
+        .then(poll => {
+          if (poll) {
+            this.setState({ editMode: true, id: poll._id });
+          }
+        });
+    } else {
+      this.props.editPollQuestion({
+        question: this.state.question,
+        id: this.state.id
+      });
+    }
   };
 
   onChangeAnserInput = answer => {
@@ -109,9 +133,19 @@ class CreateNewPoll extends Component {
     });
   };
 
+  keyPressedQuestion = e => {
+    if (e.keyCode === 13) {
+      this.onSaveQuestionInput();
+    }
+  };
+
   getIndex = n => {
     return (n + this.state.answers.length) % this.state.answers.length;
   };
+
+  delayedCallback = debounce(function(fn, ...rest) {
+    fn.apply(this, rest);
+  }, 2000);
 
   render() {
     const { classes } = this.props;
@@ -156,10 +190,15 @@ class CreateNewPoll extends Component {
               name="question"
               value={this.state.question}
               onChange={this.onChangeInput}
+              onKeyDown={this.keyPressedQuestion}
+              error={!!this.props.errors.question}
               style={{
                 width: "100%"
               }}
             />
+            {this.props.errors.question && (
+              <div className="error-label">{this.props.errors.question}</div>
+            )}
             <div className="answers">
               <List>
                 {this.state.answers.map((answer, ind) => (
@@ -223,7 +262,11 @@ class CreateNewPoll extends Component {
                 ))}
               </List>
             </div>
-            <Button color="primary" onClick={this.addAnswer}>
+            <Button
+              color="primary"
+              onClick={this.addAnswer}
+              disabled={!!!this.state.id}
+            >
               Add answer
             </Button>
           </CardBody>
@@ -280,7 +323,17 @@ class CreateNewPoll extends Component {
 }
 
 CreateNewPoll.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  addPollQuestion: PropTypes.func.isRequired,
+  editPollQuestion: PropTypes.func.isRequired,
+  errors: PropTypes.object
 };
 
-export default connect()(withStyles(dashboardStyle)(CreateNewPoll));
+const mapStateToProps = state => ({
+  errors: state.errors
+});
+
+export default connect(
+  mapStateToProps,
+  { addPollQuestion, editPollQuestion }
+)(withStyles(dashboardStyle)(CreateNewPoll));
