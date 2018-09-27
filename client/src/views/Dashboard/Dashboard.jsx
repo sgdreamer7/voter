@@ -23,10 +23,6 @@ class Dashboard extends React.Component {
     activeFilter: 0
   };
 
-  componentDidMount() {
-    this.props.getPolls();
-  }
-
   setFilter = filterValue => {
     this.setState(
       {

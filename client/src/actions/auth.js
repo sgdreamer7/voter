@@ -3,12 +3,14 @@ import setAuthToken from "../utils/setAuthToken";
 import jwt_decode from "jwt-decode";
 import { GET_ERRORS, SET_CURRENT_USER } from "./types";
 import { push } from "react-router-redux";
+import { getPolls } from "./polls";
 
 const loginAction = (token, dispatch) => {
   localStorage.setItem("jwtToken", token);
   setAuthToken(token);
   const decoded = jwt_decode(token);
   dispatch(setCurrentUser(decoded));
+  dispatch(getPolls());
 };
 
 //Register User

@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 import Hidden from "@material-ui/core/Hidden";
@@ -7,12 +8,21 @@ import Hidden from "@material-ui/core/Hidden";
 import Person from "@material-ui/icons/Person";
 // core components
 import Button from "components/CustomButtons/Button.jsx";
+import Dropdown from "../Dropdown";
+
+import { logoutUser } from "../../actions/auth";
 
 import headerLinksStyle from "assets/jss/material-dashboard-react/components/headerLinksStyle.jsx";
 
 class HeaderLinks extends React.Component {
   state = {
-    open: false
+    open: false,
+    menuList: [
+      {
+        title: "Logout",
+        handleClick: this.props.logoutUser
+      }
+    ]
   };
   handleToggle = () => {
     this.setState(state => ({ open: !state.open }));
@@ -31,25 +41,23 @@ class HeaderLinks extends React.Component {
 
     return (
       <div>
-        <Button
-          color={window.innerWidth > 959 ? "transparent" : "white"}
-          justIcon={window.innerWidth > 959}
-          simple={!(window.innerWidth > 959)}
-          aria-label="Person"
-          className={classes.buttonLink}
-        >
+        <Dropdown menuList={this.state.menuList}>
           <Person className={classes.icons} />
           <Hidden mdUp implementation="css">
             <p className={classes.linkText}>Profile</p>
           </Hidden>
-        </Button>
+        </Dropdown>
       </div>
     );
   }
 }
 
 HeaderLinks.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  logoutUser: PropTypes.func.isRequired
 };
 
-export default withStyles(headerLinksStyle)(HeaderLinks);
+export default connect(
+  null,
+  { logoutUser }
+)(withStyles(headerLinksStyle)(HeaderLinks));

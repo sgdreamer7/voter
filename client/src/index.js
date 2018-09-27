@@ -7,6 +7,7 @@ import "./axios/config";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "./utils/setAuthToken";
 import { setCurrentUser, logoutUser } from "./actions/auth";
+import { getPolls } from "./actions/polls";
 
 import { Provider } from "react-redux";
 import { ConnectedRouter } from "react-router-redux";
@@ -22,6 +23,7 @@ if (localStorage.jwtToken) {
   setAuthToken(localStorage.jwtToken);
   const decoded = jwt_decode(localStorage.jwtToken);
   store.dispatch(setCurrentUser(decoded));
+  store.dispatch(getPolls());
 
   //Check for expired token
   const currentTime = Date.now() / 1000;

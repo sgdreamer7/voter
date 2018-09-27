@@ -20,7 +20,7 @@ class EmailVerification extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "test@gmail.com",
+      email: "",
       verifyCode: ""
     };
   }

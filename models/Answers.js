@@ -16,10 +16,8 @@ const AnswerSchema = new Schema({
   },
   voted: [
     {
-      user: {
-        type: Schema.Types.ObjectId,
-        ref: "users"
-      }
+      type: Schema.Types.ObjectId,
+      ref: "users"
     }
   ]
 });

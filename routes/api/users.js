@@ -89,7 +89,13 @@ router.post("/signin", (req, res) => {
             }
           );
         } else {
-          errors.confirmed = "User email not confirmed";
+          errors.confirmed =
+            "User email not confirmed. Please check mail and click verification link";
+          console.log(
+            `http://localhost:3000/verifyEmail?email=${user.email}&code=${
+              user.verifyCode
+            }`
+          );
           return res.status(400).json(errors);
         }
       } else {

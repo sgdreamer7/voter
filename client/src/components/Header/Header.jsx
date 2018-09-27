@@ -17,13 +17,12 @@ import headerStyle from "assets/jss/material-dashboard-react/components/headerSt
 
 function Header({ ...props }) {
   function makeBrand() {
-    var name;
+    var name = "...";
 
     props.routes.map((prop, key) => {
       if (prop.path === props.location.pathname) {
         name = prop.navbarName;
       }
-      return null;
     });
     return name;
   }
