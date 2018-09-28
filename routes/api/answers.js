@@ -77,4 +77,29 @@ router.delete(
   }
 );
 
+router.post(
+  "/:answer_id/vote",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Answer.findById(req.params.answer_id).then(answer => {
+      console.log(answer);
+      if (answer) {
+        if (
+          answer.voted.length &&
+          answer.voted.filter(user => user.toString() === req.user.id).length >
+            0
+        ) {
+          return res
+            .status(400)
+            .json({ alreadyvoted: "User already voted this poll" });
+        }
+        answer.voted.push(req.user.id);
+        answer.save().then(answer => res.json(answer));
+      } else {
+        res.status(404).json({ error: "No found" });
+      }
+    });
+  }
+);
+
 module.exports = router;

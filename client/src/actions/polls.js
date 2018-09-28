@@ -49,3 +49,12 @@ export const editPollQuestion = ({ question, id }) => dispatch => {
       });
     });
 };
+
+export const getPollById = id => () => {
+  return axios
+    .get(`polls/${id}`)
+    .then(res => {
+      return res.data;
+    })
+    .catch(err => console.log(err));
+};

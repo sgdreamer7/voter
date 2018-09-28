@@ -35,3 +35,17 @@ export const deleteAnswer = (poll_id, answ_id) => () => {
     .delete(`answers/${poll_id}/${answ_id}`)
     .catch(err => console.log(err));
 };
+
+export const vote = answ_id => dispatch => {
+  return axios
+    .post(`/answers/${answ_id}/vote`)
+    .then(res => {
+      return res.data;
+    })
+    .catch(err => {
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      });
+    });
+};

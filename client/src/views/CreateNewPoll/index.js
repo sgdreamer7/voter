@@ -147,7 +147,7 @@ class CreateNewPoll extends Component {
         }
       );
     };
-    if (this.state.id) {
+    if (this.state.answers[this.state.currentEditAnswerIndex]._id) {
       this.props
         .deleteAnswer(
           this.state.id,

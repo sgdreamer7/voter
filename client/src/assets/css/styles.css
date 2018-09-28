@@ -48,3 +48,10 @@
 .error-label {
   color: red;
 }
+.progress {
+  min-width: 200px;
+}
+.progress__inner {
+  background: blueviolet;
+  height: 10px;
+}

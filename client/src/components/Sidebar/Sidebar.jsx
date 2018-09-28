@@ -22,12 +22,19 @@ const Sidebar = ({ ...props }) => {
     return props.location.pathname.indexOf(routeName) > -1 ? true : false;
   }
   const { classes, color, logo, image, logoText, routes } = props;
+  const event = (match, location) => {
+    console.log(location.pathname.match(/poll/).length);
+    if (location.pathname.match(/poll/).length) return true;
+    if (!match) {
+      return false;
+    }
+    return true;
+  };
   var links = (
     <List className={classes.list}>
       {routes.map((prop, key) => {
         if (prop.redirect || prop.path === "/verifyEmail") return null;
-        var activePro = " ";
-        var listItemClasses;
+        if (prop.path) var listItemClasses;
 
         listItemClasses = classNames({
           [" " + classes[color]]: activeRoute(prop.path)
@@ -39,8 +46,9 @@ const Sidebar = ({ ...props }) => {
         return (
           <NavLink
             to={prop.path}
-            className={activePro + classes.item}
+            className={classes.item}
             activeClassName="active"
+            isActive={event}
             key={key}
           >
             <ListItem button className={classes.itemLink + listItemClasses}>
