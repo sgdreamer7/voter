@@ -33,7 +33,7 @@ export const addPollQuestion = question => dispatch => {
 };
 
 export const editPollQuestion = ({ question, id }) => dispatch => {
-  axios
+  return axios
     .patch(`polls/${id}`, { question })
     .then(({ data }) => {
       dispatch({
@@ -43,10 +43,18 @@ export const editPollQuestion = ({ question, id }) => dispatch => {
       });
     })
     .catch(err => {
-      console.log(err);
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data
       });
     });
+};
+
+export const getPollById = id => () => {
+  return axios
+    .get(`polls/${id}`)
+    .then(res => {
+      return res.data;
+    })
+    .catch(err => console.log(err));
 };

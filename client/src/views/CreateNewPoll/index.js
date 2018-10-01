@@ -22,49 +22,86 @@ import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardS
 
 import EditPollModal from "./EditModal";
 import { addPollQuestion, editPollQuestion } from "../../actions/polls";
+import { addAnswer, editAnswer, deleteAnswer } from "../../actions/answers";
 
 class CreateNewPoll extends Component {
   state = {
     question: "",
     id: "",
+    isQuestionChanged: false,
     openDeleteModal: false,
     openEditModal: false,
-    currentEditAnswerIndex: null,
-    editMode: false,
+    currentEditAnswerIndex: 0,
     answers: []
   };
 
   onChangeInput = e => {
-    this.setState({
-      [e.target.name]: e.target.value
-    });
-    this.delayedCallback(this.onSaveQuestionInput);
+    const value = e.target.value;
+    const name = e.target.name;
+    this.setState(
+      prevState => {
+        if (prevState.question !== value) {
+          return {
+            [name]: value,
+            isQuestionChanged: true
+          };
+        } else if (value === "") {
+          // send to server for validation
+          return {
+            isQuestionChanged: true
+          };
+        }
+      },
+      () => {
+        if (this.state.isQuestionChanged) {
+          this.delayedCallback(this.onSaveQuestionInput);
+        }
+      }
+    );
   };
 
   onSaveQuestionInput = () => {
-    if (!this.state.editMode) {
+    if (!this.state.id) {
       this.props
         .addPollQuestion({
           question: this.state.question
         })
         .then(poll => {
           if (poll) {
-            this.setState({ editMode: true, id: poll._id });
+            this.setState({ id: poll._id, isQuestionChanged: false });
           }
         });
     } else {
-      this.props.editPollQuestion({
-        question: this.state.question,
-        id: this.state.id
-      });
+      if (this.state.isQuestionChanged) {
+        this.props
+          .editPollQuestion({
+            question: this.state.question,
+            id: this.state.id
+          })
+          .then(res => {
+            this.setState({
+              isQuestionChanged: false
+            });
+          });
+      }
     }
   };
 
-  onChangeAnserInput = answer => {
+  saveAnswerInput = answer => {
+    const dataSend = {
+      answer: answer.answer,
+      order: answer.order
+    };
+    this.props.addAnswer(this.state.id, dataSend).then(savedAnswer => {
+      this.setStateAnswer(savedAnswer);
+    });
+  };
+
+  setStateAnswer = answer => {
     this.setState(
       prevState => {
-        let answers = prevState.answers.map(answer => ({ ...answer }));
-        answers[prevState.currentEditAnswerIndex].answer = answer;
+        let answers = prevState.answers.map(item => ({ ...item }));
+        answers[prevState.currentEditAnswerIndex] = answer;
         return {
           answers
         };
@@ -75,6 +112,15 @@ class CreateNewPoll extends Component {
     );
   };
 
+  editAnswerInput = answer => {
+    const dataSend = {
+      answer: answer.answer
+    };
+    this.props.editAnswer(answer._id, dataSend).then(savedAnswer => {
+      this.setStateAnswer(savedAnswer);
+    });
+  };
+
   handleModalOpen = (modal, ind) => {
     this.setState({ [modal]: true, currentEditAnswerIndex: ind });
   };
@@ -83,25 +129,43 @@ class CreateNewPoll extends Component {
     this.setState({ [open]: false });
   };
 
-  deletePoll = () => {
-    this.setState(
-      prevState => {
-        let answers = prevState.answers.slice();
-        answers.splice(prevState.currentEditAnswerIndex, 1);
-        return {
-          answers
-        };
-      },
-      () => {
-        this.handleModalClose("openDeleteModal");
-      }
-    );
+  deleteAnswer = () => {
+    const deleteFromState = () => {
+      this.setState(
+        prevState => {
+          let answers = prevState.answers.slice();
+          answers.splice(prevState.currentEditAnswerIndex, 1);
+          return {
+            answers
+          };
+        },
+        () => {
+          if (this.state.currentEditAnswerIndex !== this.state.answers.length) {
+            this.saveOrders(this.state.currentEditAnswerIndex);
+          }
+          this.handleModalClose("openDeleteModal");
+        }
+      );
+    };
+    if (this.state.answers[this.state.currentEditAnswerIndex]._id) {
+      this.props
+        .deleteAnswer(
+          this.state.id,
+          this.state.answers[this.state.currentEditAnswerIndex]._id
+        )
+        .then(() => {
+          deleteFromState();
+        });
+    } else {
+      deleteFromState();
+    }
   };
 
   addAnswer = () => {
     this.setState(prevState => {
       let newAnser = {
-        answer: ""
+        answer: "",
+        order: prevState.answers.length
       };
       return {
         answers: [...prevState.answers, newAnser]
@@ -111,14 +175,26 @@ class CreateNewPoll extends Component {
 
   movePollUp = ind => {
     this.setState(prevState => {
+      const indexMove = this.getIndex(ind - 1);
       let answers = prevState.answers.slice();
       let answerToMove = answers.splice(ind, 1);
-      let indexMove = this.getIndex(ind - 1);
       answers.splice(indexMove, 0, answerToMove[0]);
       return {
         answers
       };
-    });
+    }, this.saveOrders);
+  };
+
+  saveOrders = (from = 0) => {
+    const answers = this.state.answers.map(el => ({ ...el }));
+    for (let i = from; i < answers.length; i++) {
+      let item = answers[i];
+      if (item._id) {
+        this.props.editAnswer(item._id, { order: i });
+      }
+      item.order = i;
+    }
+    this.setState({ answers });
   };
 
   movePollDown = ind => {
@@ -130,7 +206,7 @@ class CreateNewPoll extends Component {
       return {
         answers
       };
-    });
+    }, this.saveOrders);
   };
 
   keyPressedQuestion = e => {
@@ -300,22 +376,19 @@ class CreateNewPoll extends Component {
               >
                 Cancel
               </Button>
-              <Button color="danger" onClick={this.deletePoll}>
+              <Button color="danger" onClick={this.deleteAnswer}>
                 DELETE
               </Button>
             </div>
           </div>
         </Modal>
         <EditPollModal
-          answer={
-            this.state.currentEditAnswerIndex !== null
-              ? this.state.answers[this.state.currentEditAnswerIndex].answer
-              : ""
-          }
+          answer={this.state.answers[this.state.currentEditAnswerIndex]}
           key={this.state.openEditModal}
           open={this.state.openEditModal}
           handleClose={() => this.handleModalClose("openEditModal")}
-          handleEdit={this.onChangeAnserInput}
+          handleSave={this.saveAnswerInput}
+          handleEdit={this.editAnswerInput}
         />
       </div>
     );
@@ -326,7 +399,10 @@ CreateNewPoll.propTypes = {
   classes: PropTypes.object.isRequired,
   addPollQuestion: PropTypes.func.isRequired,
   editPollQuestion: PropTypes.func.isRequired,
-  errors: PropTypes.object
+  errors: PropTypes.object,
+  addAnswer: PropTypes.func.isRequired,
+  editAnswer: PropTypes.func.isRequired,
+  deleteAnswer: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -335,5 +411,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { addPollQuestion, editPollQuestion }
+  { addPollQuestion, editPollQuestion, addAnswer, editAnswer, deleteAnswer }
 )(withStyles(dashboardStyle)(CreateNewPoll));

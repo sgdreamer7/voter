@@ -22,6 +22,7 @@ router.post(
       return res.status(400).json(errors);
     }
     Polls.findById(req.params.poll_id).then(poll => {
+      console.log(req.body);
       const newAnswer = new Answer({
         answer: req.body.answer,
         order: req.body.order
@@ -40,32 +41,27 @@ router.patch(
   "/:answer_id",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    const { isValid, errors } = validateAnswerInput(req.body);
+    const { isValid, errors } = validateAnswerInput(req.body, true);
 
     if (!isValid) {
       return res.status(400).json(errors);
     }
 
-    const newData = {
-      answer: req.body.answer,
-      order: req.body.order
-    };
-
     Answer.findOneAndUpdate(
       { _id: req.params.answer_id },
-      { $set: newData },
+      { $set: req.body },
       { new: true }
     ).then(answer => res.json(answer));
   }
 );
 
 router.delete(
-  "/:answer_id",
+  "/:poll_id/:answer_id",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     Answer.findOneAndRemove({ _id: req.params.answer_id }).then(answer => {
       if (answer) {
-        Polls.findById(answer.poll).then(poll => {
+        Polls.findById(req.params.poll_id).then(poll => {
           poll.answers = poll.answers.filter(
             item => item.toString() !== req.params.answer_id
           );
@@ -74,6 +70,31 @@ router.delete(
             return res.json({ success: true, answer });
           });
         });
+      } else {
+        res.status(404).json({ error: "No found" });
+      }
+    });
+  }
+);
+
+router.post(
+  "/:answer_id/vote",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Answer.findById(req.params.answer_id).then(answer => {
+      console.log(answer);
+      if (answer) {
+        if (
+          answer.voted.length &&
+          answer.voted.filter(user => user.toString() === req.user.id).length >
+            0
+        ) {
+          return res
+            .status(400)
+            .json({ alreadyvoted: "User already voted this poll" });
+        }
+        answer.voted.push(req.user.id);
+        answer.save().then(answer => res.json(answer));
       } else {
         res.status(404).json({ error: "No found" });
       }

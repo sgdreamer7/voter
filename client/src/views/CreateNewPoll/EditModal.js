@@ -10,18 +10,39 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
 
 class EditPoll extends Component {
+  static defaultProps = {
+    answer: {
+      answer: ""
+    }
+  };
+
   state = {
     answer: this.props.answer
   };
 
   onChangeInput = e => {
-    this.setState({
-      [e.target.name]: e.target.value
+    e.persist();
+    this.setState(prevState => {
+      let answer = { ...prevState.answer };
+      answer.answer = e.target.value;
+      return {
+        answer
+      };
     });
   };
 
-  editPoll = () => {
-    this.props.handleEdit(this.state.answer);
+  keyPressedEnter = e => {
+    if (e.keyCode === 13) {
+      this.saveAnswer();
+    }
+  };
+
+  saveAnswer = () => {
+    if (this.state.answer._id) {
+      this.props.handleEdit(this.state.answer);
+    } else {
+      this.props.handleSave(this.state.answer);
+    }
   };
 
   render() {
@@ -61,8 +82,10 @@ class EditPoll extends Component {
             type="text"
             margin="normal"
             name="answer"
-            value={this.state.answer}
+            value={this.state.answer.answer}
             onChange={this.onChangeInput}
+            autoFocus
+            onKeyDown={this.keyPressedEnter}
             style={{
               width: "100%"
             }}
@@ -78,8 +101,8 @@ class EditPoll extends Component {
             <Button color="info" onClick={this.props.handleClose}>
               Cancel
             </Button>
-            <Button color="success" onClick={this.editPoll}>
-              EDIT
+            <Button color="success" onClick={this.saveAnswer}>
+              {this.state.answer._id ? "EDIT" : "SAVE"}
             </Button>
           </div>
         </div>
@@ -92,7 +115,8 @@ EditPoll.propTypes = {
   classes: PropTypes.object.isRequired,
   handleClose: PropTypes.func.isRequired,
   handleEdit: PropTypes.func.isRequired,
-  answer: PropTypes.string,
+  handleSave: PropTypes.func.isRequired,
+  answer: PropTypes.object,
   open: PropTypes.bool
 };
 

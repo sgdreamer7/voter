@@ -110,9 +110,9 @@ class Dashboard extends React.Component {
           </CardHeader>
           <CardBody>
             <List>
-              {this.props.polls.map((poll, i) => (
+              {this.props.polls.map(poll => (
                 <ListItem
-                  key={i}
+                  key={poll._id}
                   className="polls-item"
                   divider={true}
                   style={{

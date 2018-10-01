@@ -15,7 +15,7 @@ const dashboardRoutes = [
     component: DashboardPage
   },
   {
-    path: "/poll",
+    path: "/poll/:id",
     sidebarName: "Poll",
     navbarName: "Poll",
     icon: InsertDriveFile,
