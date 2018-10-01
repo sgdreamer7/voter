@@ -5,20 +5,20 @@ import { Route, Switch } from "react-router-dom";
 import "./axios/config";
 
 import jwt_decode from "jwt-decode";
+
 import setAuthToken from "./utils/setAuthToken";
 import { setCurrentUser, logoutUser } from "./actions/auth";
 
 import { Provider } from "react-redux";
 import { ConnectedRouter } from "react-router-redux";
-import configureStore, { history } from "./store/configureStore";
+import store, { history } from "./store/configureStore";
 import "assets/css/material-dashboard-react.css?v=1.5.0";
 import "assets/css/styles.css";
 
 import indexRoutes from "routes/index.jsx";
 
-const store = configureStore();
-
 if (localStorage.jwtToken) {
+  console.log("check token");
   setAuthToken(localStorage.jwtToken);
   const decoded = jwt_decode(localStorage.jwtToken);
   store.dispatch(setCurrentUser(decoded));

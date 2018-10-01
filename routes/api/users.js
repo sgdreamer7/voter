@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const User = require("../../models/User");
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+const TokenGenerator = require("../../auth/tokenGenerator");
 const keys = require("../../config/keys");
 const passport = require("passport");
 const crypto = require("crypto");
@@ -69,40 +69,44 @@ router.post("/signin", (req, res) => {
       return res.status(404).json(errors);
     }
 
-    bcrypt.compare(password, user.password).then(isMatch => {
-      if (isMatch) {
-        if (user.confirmed) {
-          const payload = {
-            id: user.id,
-            email: user.email
-          };
+    bcrypt
+      .compare(password, user.password)
+      .then(isMatch => {
+        if (isMatch) {
+          if (user.confirmed) {
+            const payload = {
+              id: user.id,
+              email: user.email
+            };
 
-          jwt.sign(
-            payload,
-            keys.secretOrKey,
-            { expiresIn: 3600 },
-            (err, token) => {
+            const tokenGenerator = new TokenGenerator(
+              keys.secretOrKey,
+              keys.secretOrKey,
+              { expiresIn: "1m" }
+            );
+
+            tokenGenerator.sign(payload, {}, (err, token) => {
               return res.json({
                 success: true,
                 token: "Bearer " + token
               });
-            }
-          );
+            });
+          } else {
+            errors.confirmed =
+              "User email not confirmed. Please check mail and click verification link";
+            console.log(
+              `http://localhost:3000/verifyEmail?email=${user.email}&code=${
+                user.verifyCode
+              }`
+            );
+            return res.status(400).json(errors);
+          }
         } else {
-          errors.confirmed =
-            "User email not confirmed. Please check mail and click verification link";
-          console.log(
-            `http://localhost:3000/verifyEmail?email=${user.email}&code=${
-              user.verifyCode
-            }`
-          );
+          errors.password = "Password incorrect";
           return res.status(400).json(errors);
         }
-      } else {
-        errors.password = "Password incorrect";
-        return res.status(400).json(errors);
-      }
-    });
+      })
+      .catch(err => console.log(err));
   });
 });
 
@@ -113,24 +117,25 @@ router.post("/verifyEmail", (req, res) => {
   User.findOne({ email })
     .then(user => {
       if (user.verifyCode === verifyCode) {
-        const payload = {
-          id: user.id,
-          email: user.email
-        };
-
         user.confirmed = true;
         user.save().then(user => {
-          jwt.sign(
-            payload,
+          const payload = {
+            id: user.id,
+            email: user.email
+          };
+
+          const tokenGenerator = new TokenGenerator(
             keys.secretOrKey,
-            { expiresIn: 3600 },
-            (err, token) => {
-              return res.json({
-                success: true,
-                token: "Bearer " + token
-              });
-            }
+            keys.secretOrKey,
+            { expiresIn: "1m" }
           );
+
+          tokenGenerator.sign(payload, {}, (err, token) => {
+            return res.json({
+              success: true,
+              token: "Bearer " + token
+            });
+          });
         });
       } else {
         errors.verifyCode = "Verify code incorrect";
