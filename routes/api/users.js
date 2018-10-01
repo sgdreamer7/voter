@@ -82,7 +82,7 @@ router.post("/signin", (req, res) => {
             const tokenGenerator = new TokenGenerator(
               keys.secretOrKey,
               keys.secretOrKey,
-              { expiresIn: "1m" }
+              { expiresIn: "1h" }
             );
 
             tokenGenerator.sign(payload, {}, (err, token) => {

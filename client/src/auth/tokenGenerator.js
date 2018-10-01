@@ -17,8 +17,8 @@ TokenGenerator.prototype.refresh = function(token, refreshOptions) {
   return new Promise((resolve, reject) => {
     try {
       jwt.verify(token, this.secretOrPublicKey, refreshOptions.verify);
+      resolve();
     } catch (error) {
-      console.log(error);
       if (error.name === "TokenExpiredError") {
         const payload = jwt.decode(token, { complete: true }).payload;
         delete payload.iat;
