@@ -25,15 +25,18 @@ if (localStorage.jwtToken) {
     { expiresIn: "1h" }
   );
   tokenGenerator.refresh(token, {}).then(newtoken => {
+    console.log(newtoken);
     if (newtoken) {
       const headerAuth = "Bearer " + newtoken;
       localStorage.setItem("jwtToken", headerAuth);
       setAuthToken(headerAuth);
       const decoded = jwt_decode(headerAuth);
       store.dispatch(setCurrentUser(decoded));
+    } else {
+      setAuthToken(localStorage.jwtToken);
+      console.log(token);
+      store.dispatch(setCurrentUser(jwt_decode(token)));
     }
-    setAuthToken(token);
-    store.dispatch(setCurrentUser(jwt_decode(token)));
   });
 }
 

@@ -16,8 +16,9 @@ TokenGenerator.prototype.sign = function(payload, signOptions, cb) {
 TokenGenerator.prototype.refresh = function(token, refreshOptions) {
   return new Promise((resolve, reject) => {
     try {
-      jwt.verify(token, this.secretOrPublicKey, refreshOptions.verify);
-      resolve();
+      jwt.verify(token, this.secretOrPublicKey, refreshOptions.verify, () => {
+        resolve();
+      });
     } catch (error) {
       if (error.name === "TokenExpiredError") {
         const payload = jwt.decode(token, { complete: true }).payload;

@@ -7,7 +7,6 @@ import Hidden from "@material-ui/core/Hidden";
 // @material-ui/icons
 import Person from "@material-ui/icons/Person";
 // core components
-import Button from "components/CustomButtons/Button.jsx";
 import Dropdown from "../Dropdown";
 
 import { logoutUser } from "../../actions/auth";

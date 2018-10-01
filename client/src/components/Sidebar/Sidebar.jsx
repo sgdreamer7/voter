@@ -22,13 +22,7 @@ const Sidebar = ({ ...props }) => {
     return props.location.pathname.indexOf(routeName) > -1 ? true : false;
   }
   const { classes, color, logo, image, logoText, routes } = props;
-  const event = (match, location) => {
-    if (location.pathname.match(/poll/)) return true;
-    if (!match) {
-      return false;
-    }
-    return true;
-  };
+
   var links = (
     <List className={classes.list}>
       {routes.map((prop, key) => {
@@ -47,7 +41,6 @@ const Sidebar = ({ ...props }) => {
             to={prop.path}
             className={classes.item}
             activeClassName="active"
-            isActive={event}
             key={key}
           >
             <ListItem button className={classes.itemLink + listItemClasses}>

@@ -20,7 +20,10 @@ function Header({ ...props }) {
     var name = "...";
 
     props.routes.map((prop, key) => {
-      if (prop.path === props.location.pathname) {
+      if (
+        prop.path === props.location.pathname ||
+        (prop.path === "/poll" && props.location.pathname.match(/poll/))
+      ) {
         name = prop.navbarName;
       }
     });

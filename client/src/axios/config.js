@@ -20,6 +20,7 @@ axios.interceptors.request.use(
       );
 
       return tokenGenerator.refresh(token, {}).then(newtoken => {
+        console.log(newtoken);
         if (newtoken) {
           const headerAuth = "Bearer " + newtoken;
           localStorage.setItem("jwtToken", headerAuth);
