@@ -23,8 +23,7 @@ const Sidebar = ({ ...props }) => {
   }
   const { classes, color, logo, image, logoText, routes } = props;
   const event = (match, location) => {
-    console.log(location.pathname.match(/poll/).length);
-    if (location.pathname.match(/poll/).length) return true;
+    if (location.pathname.match(/poll/)) return true;
     if (!match) {
       return false;
     }

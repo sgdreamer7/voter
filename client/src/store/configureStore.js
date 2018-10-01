@@ -11,17 +11,15 @@ export const history = createHistory();
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const middleware = routerMiddleware(history);
 
-export default () => {
-  const store = createStore(
-    combineReducers({
-      auth: authReducer,
-      polls: pollsReducer,
-      filters: filterReducer,
-      routing: routerReducer,
-      errors: errorReducer
-    }),
-    composeEnhancers(applyMiddleware(thunk), applyMiddleware(middleware))
-  );
+const store = createStore(
+  combineReducers({
+    auth: authReducer,
+    polls: pollsReducer,
+    filters: filterReducer,
+    routing: routerReducer,
+    errors: errorReducer
+  }),
+  composeEnhancers(applyMiddleware(thunk), applyMiddleware(middleware))
+);
 
-  return store;
-};
+export default store;
