@@ -11,6 +11,10 @@ const format = require("biguint-format");
 const validateRegisterInput = require("../../validations/register");
 const validateLoginInput = require("../../validations/login");
 
+const tokenGenerator = new TokenGenerator(keys.secretOrKey, keys.secretOrKey, {
+  expiresIn: "1m"
+});
+
 router.post("/signup", (req, res) => {
   const { errors, isValid } = validateRegisterInput(req.body);
 
@@ -79,12 +83,6 @@ router.post("/signin", (req, res) => {
               email: user.email
             };
 
-            const tokenGenerator = new TokenGenerator(
-              keys.secretOrKey,
-              keys.secretOrKey,
-              { expiresIn: "1h" }
-            );
-
             tokenGenerator.sign(payload, {}, (err, token) => {
               return res.json({
                 success: true,
@@ -143,6 +141,15 @@ router.post("/verifyEmail", (req, res) => {
       }
     })
     .catch(err => res.json(err));
+});
+
+router.post("/refreshToken", (req, res) => {
+  tokenGenerator.refresh(req.body.token, {}, (err, token) => {
+    return res.json({
+      success: true,
+      refreshtoken: "Bearer " + token
+    });
+  });
 });
 
 router.get(

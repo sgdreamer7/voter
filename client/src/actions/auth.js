@@ -59,6 +59,13 @@ export const verifyEmail = userData => dispatch => {
     });
 };
 
+export const refreshToken = data => dispatch => {
+  return axios.post("users/refreshToken", data).then(res => {
+    const { refreshtoken } = res.data;
+    loginAction(refreshtoken, dispatch);
+  });
+};
+
 export const setCurrentUser = decoded => {
   return {
     type: SET_CURRENT_USER,

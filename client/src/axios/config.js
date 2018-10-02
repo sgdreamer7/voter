@@ -1,9 +1,7 @@
 import axios from "axios";
 import jwt_decode from "jwt-decode";
-import TokenGenerator from "../auth/tokenGenerator";
-import keys from "../auth/keys";
 import store from "../store/configureStore";
-import { setCurrentUser } from "../actions/auth";
+import { refreshToken, logoutUser } from "../actions/auth";
 
 axios.defaults.baseURL = "http://localhost:5000/api/";
 
@@ -11,28 +9,21 @@ axios.defaults.baseURL = "http://localhost:5000/api/";
 axios.interceptors.request.use(
   config => {
     // Do something before request is sent
-    if (config.headers.common.Authorization) {
+    if (
+      config.headers.common.Authorization &&
+      config.url !== "users/refreshToken"
+    ) {
       const token = config.headers.common.Authorization.split(" ")[1];
-      const tokenGenerator = new TokenGenerator(
-        keys.secretOrKey,
-        keys.secretOrKey,
-        { expiresIn: "1h" }
-      );
-
-      return tokenGenerator.refresh(token, {}).then(newtoken => {
-        console.log(newtoken);
-        if (newtoken) {
-          const headerAuth = "Bearer " + newtoken;
-          localStorage.setItem("jwtToken", headerAuth);
-          config.headers.Authorization = headerAuth;
-          const decoded = jwt_decode(headerAuth);
-          store.dispatch(setCurrentUser(decoded));
-        }
-        return Promise.resolve(config);
-      });
-    } else {
-      return config;
+      const decoded = jwt_decode(token);
+      //Check for expired token
+      const currentTime = Date.now() / 1000;
+      if (decoded.exp < currentTime) {
+        store.dispatch(refreshToken({ token })).then(() => {
+          return Promise.resolve(config);
+        });
+      }
     }
+    return Promise.resolve(config);
   },
   error => {
     return Promise.reject(error);

@@ -121,6 +121,10 @@ class Poll extends Component {
                         <TableRow
                           key={answer._id}
                           onClick={() => this.vote(answer._id)}
+                          style={{
+                            cursor: "pointer"
+                          }}
+                          hover={true}
                         >
                           <TableCell component="th" scope="row">
                             {answer.answer}
