@@ -13,7 +13,7 @@ const loginAction = (token, dispatch) => {
 
 //Register User
 export const registerUser = userData => dispatch => {
-  axios
+  return axios
     .post("users/signup", userData)
     .then(res => {
       console.log(res.data);
@@ -29,7 +29,7 @@ export const registerUser = userData => dispatch => {
 //Login - Get User Token
 
 export const loginUser = userData => dispatch => {
-  axios
+  return axios
     .post("users/signin", userData)
     .then(res => {
       const { token } = res.data;
@@ -44,7 +44,7 @@ export const loginUser = userData => dispatch => {
 };
 
 export const verifyEmail = userData => dispatch => {
-  axios
+  return axios
     .post("users/verifyEmail", userData)
     .then(res => {
       const { token } = res.data;
