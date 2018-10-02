@@ -23,6 +23,7 @@ class HeaderLinks extends React.Component {
       }
     ]
   };
+
   handleToggle = () => {
     this.setState(state => ({ open: !state.open }));
   };
@@ -39,7 +40,13 @@ class HeaderLinks extends React.Component {
     const { classes } = this.props;
 
     return (
-      <div>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center"
+        }}
+      >
+        {this.props.auth.isAuthenticated && this.props.auth.user.email}
         <Dropdown menuList={this.state.menuList}>
           <Person className={classes.icons} />
           <Hidden mdUp implementation="css">
@@ -56,7 +63,11 @@ HeaderLinks.propTypes = {
   logoutUser: PropTypes.func.isRequired
 };
 
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
 export default connect(
-  null,
+  mapStateToProps,
   { logoutUser }
 )(withStyles(headerLinksStyle)(HeaderLinks));

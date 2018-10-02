@@ -11,47 +11,38 @@ const getVisiblePolls = createSelector(
     if (filters.vote) {
       let votedPolls = [];
       polls.forEach(poll => {
-        for (let i = 0; i < poll.answers.length; i++) {
+        outer: for (let i = 0; i < poll.answers.length; i++) {
           let answer = poll.answers[i];
-          let find = false;
           for (let j = 0; j < answer.voted.length; j++) {
             let vote = answer.voted[j];
             if (vote.toString() === user.id) {
               votedPolls.push(poll);
-              find = true;
-              break;
+              break outer;
             }
           }
-          if (find) break;
         }
       });
       return votedPolls;
     } else {
-      let votedPolls = [];
+      let notvotedPolls = [];
       polls.forEach(poll => {
-        if (!poll.answers.length) {
-          votedPolls.push(poll);
-        }
-        for (let i = 0; i < poll.answers.length; i++) {
+        let find = false;
+        outer: for (let i = 0; i < poll.answers.length; i++) {
           let answer = poll.answers[i];
-          if (!answer.voted.length) {
-            votedPolls.push(poll);
-            break;
-          } else {
-            let find = false;
-            for (let j = 0; j < answer.voted.length; j++) {
-              let vote = answer.voted[j];
-              if (vote.toString() !== user.id) {
-                votedPolls.push(poll);
-                find = true;
-                break;
-              }
+          for (let j = 0; j < answer.voted.length; j++) {
+            let vote = answer.voted[j];
+            if (vote.toString() === user.id) {
+              find = true;
+              break outer;
             }
-            if (find) break;
           }
         }
+
+        if (!find) {
+          notvotedPolls.push(poll);
+        }
       });
-      return votedPolls;
+      return notvotedPolls;
     }
   }
 );

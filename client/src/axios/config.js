@@ -18,12 +18,15 @@ axios.interceptors.request.use(
       //Check for expired token
       const currentTime = Date.now() / 1000;
       if (decoded.exp < currentTime) {
-        store.dispatch(refreshToken({ token })).then(() => {
+        return store.dispatch(refreshToken({ token })).then(() => {
           return Promise.resolve(config);
         });
+      } else {
+        return Promise.resolve(config);
       }
+    } else {
+      return Promise.resolve(config);
     }
-    return Promise.resolve(config);
   },
   error => {
     return Promise.reject(error);

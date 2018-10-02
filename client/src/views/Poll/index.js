@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import classnames from "classnames";
 import Card from "components/Card/Card.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
@@ -21,7 +22,8 @@ class Poll extends Component {
     super(props);
     this.state = {
       poll: {},
-      totalVoted: 0
+      totalVoted: 0,
+      voted: false
     };
   }
 
@@ -44,29 +46,36 @@ class Poll extends Component {
   };
 
   vote = id => {
-    this.props.vote(id).then(newanswer => {
-      if (newanswer) {
-        this.setState(prevState => {
-          let pollCopy = { ...prevState.poll };
-          const answers = pollCopy.answers.map(answer => {
-            if (answer._id.toString() === id) {
-              return {
-                ...newanswer
-              };
-            }
-            return answer;
+    if (!this.state.voted) {
+      this.props.vote(id).then(newanswer => {
+        if (newanswer) {
+          this.setState(prevState => {
+            let pollCopy = { ...prevState.poll };
+            const answers = pollCopy.answers.map(answer => {
+              if (answer._id.toString() === id) {
+                return {
+                  ...newanswer
+                };
+              }
+              return answer;
+            });
+
+            pollCopy.answers = answers;
+            const totalVoted = this.getTotalVoted(pollCopy);
+
+            return {
+              poll: pollCopy,
+              totalVoted,
+              voted: true
+            };
           });
+        }
+      });
+    }
+  };
 
-          pollCopy.answers = answers;
-          const totalVoted = this.getTotalVoted(pollCopy);
-
-          return {
-            poll: pollCopy,
-            totalVoted
-          };
-        });
-      }
-    });
+  isUserVoted = answer => {
+    return answer.voted.find(user_id => user_id === this.props.user.id);
   };
 
   getPercentValue = voted => {
@@ -127,7 +136,13 @@ class Poll extends Component {
                           hover={true}
                         >
                           <TableCell component="th" scope="row">
-                            {answer.answer}
+                            <div
+                              className={classnames({
+                                voted: this.isUserVoted(answer)
+                              })}
+                            >
+                              {answer.answer}
+                            </div>
                           </TableCell>
                           <TableCell numeric>{answer.voted.length}</TableCell>
                           <TableCell>
@@ -166,7 +181,11 @@ Poll.propTypes = {
   vote: PropTypes.func
 };
 
+const mapStateToProps = state => ({
+  user: state.auth.user
+});
+
 export default connect(
-  null,
+  mapStateToProps,
   { getPollById, vote }
 )(withStyles(dashboardStyle)(Poll));

@@ -73,7 +73,7 @@ class EditPoll extends Component {
               margin: "20px 0"
             }}
           >
-            Edit poll
+            Create answer
           </Typography>
 
           <TextField

@@ -12,7 +12,7 @@ const validateRegisterInput = require("../../validations/register");
 const validateLoginInput = require("../../validations/login");
 
 const tokenGenerator = new TokenGenerator(keys.secretOrKey, keys.secretOrKey, {
-  expiresIn: "1m"
+  expiresIn: "1h"
 });
 
 router.post("/signup", (req, res) => {
