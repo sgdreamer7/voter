@@ -3,7 +3,7 @@ import axios from "axios";
 import { SET_POLLS, ADD_POLL, EDIT_POLL, GET_ERRORS } from "./types";
 
 export const getPolls = () => dispatch => {
-  axios
+  return axios
     .get("polls")
     .then(res => {
       dispatch({
