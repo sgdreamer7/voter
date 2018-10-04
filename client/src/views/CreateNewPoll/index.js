@@ -23,6 +23,7 @@ import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardS
 import EditPollModal from "./EditModal";
 import { addPollQuestion, editPollQuestion } from "../../actions/polls";
 import { addAnswer, editAnswer, deleteAnswer } from "../../actions/answers";
+import { log } from "util";
 
 export class CreateNewPoll extends Component {
   state = {
@@ -161,6 +162,7 @@ export class CreateNewPoll extends Component {
   };
 
   addAnswer = () => {
+    console.log("add answer");
     this.setState(prevState => {
       let newAnser = {
         answer: "",

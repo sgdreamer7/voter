@@ -134,7 +134,8 @@ export class SignIn extends Component {
 SignIn.propTypes = {
   classes: PropTypes.object.isRequired,
   errors: PropTypes.object,
-  loginUser: PropTypes.func.isRequired
+  loginUser: PropTypes.func.isRequired,
+  setErrors: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
