@@ -19,7 +19,7 @@ router.get(
     Polls.findById(req.params.id)
       .populate("answers")
       .then(poll => res.json(poll))
-      .catch(err => console.log(err));
+      .catch(err => res.json({ error: err }));
   }
 );
 
@@ -39,7 +39,7 @@ router.post(
     newPoll
       .save()
       .then(poll => res.json(poll))
-      .catch(err => console.log(err));
+      .catch(err => res.json({ error: err }));
   }
 );
 

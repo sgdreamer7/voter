@@ -12,7 +12,7 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import withStyles from "@material-ui/core/styles/withStyles";
 import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
-
+import { setErrors } from "../../actions/errors";
 import { loginUser } from "../../actions/auth";
 
 export class SignIn extends Component {
@@ -22,6 +22,10 @@ export class SignIn extends Component {
       email: "",
       password: ""
     };
+  }
+
+  componentDidMount() {
+    this.props.setErrors({});
   }
 
   onChangeInput = e => {
@@ -74,7 +78,7 @@ export class SignIn extends Component {
                   className={classes.textField}
                   value={this.state.email}
                   onChange={this.onChangeInput}
-                  error={this.props.errors.email}
+                  error={!!this.props.errors.email}
                   type="email"
                   name="email"
                   margin="normal"
@@ -89,7 +93,7 @@ export class SignIn extends Component {
                   type="password"
                   name="password"
                   margin="normal"
-                  error={this.props.errors.password}
+                  error={!!this.props.errors.password}
                   value={this.state.password}
                   onChange={this.onChangeInput}
                 />
@@ -139,5 +143,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { loginUser }
+  { loginUser, setErrors: errors => dispatch => dispatch(setErrors(errors)) }
 )(withStyles(dashboardStyle)(SignIn));

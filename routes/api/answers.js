@@ -22,7 +22,6 @@ router.post(
       return res.status(400).json(errors);
     }
     Polls.findById(req.params.poll_id).then(poll => {
-      console.log(req.body);
       const newAnswer = new Answer({
         answer: req.body.answer,
         order: req.body.order

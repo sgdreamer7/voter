@@ -1,8 +1,9 @@
 import axios from "axios";
 import setAuthToken from "../utils/setAuthToken";
 import jwt_decode from "jwt-decode";
-import { GET_ERRORS, SET_CURRENT_USER } from "./types";
+import { SET_CURRENT_USER } from "./types";
 import { push } from "react-router-redux";
+import { setErrors } from "./errors";
 
 const loginAction = (token, dispatch) => {
   localStorage.setItem("jwtToken", token);
@@ -19,11 +20,7 @@ export const registerUser = userData => dispatch => {
       console.log(res.data);
     })
     .catch(err => {
-      console.log(err.response);
-      dispatch({
-        type: GET_ERRORS,
-        payload: err.response.data
-      });
+      dispatch(setErrors(err.response.data));
     });
 };
 //Login - Get User Token
@@ -36,10 +33,7 @@ export const loginUser = userData => dispatch => {
       loginAction(token, dispatch);
     })
     .catch(err => {
-      dispatch({
-        type: GET_ERRORS,
-        payload: err.response.data
-      });
+      dispatch(setErrors(err.response.data));
     });
 };
 
@@ -52,10 +46,7 @@ export const verifyEmail = userData => dispatch => {
       dispatch(push("/dashboard"));
     })
     .catch(err => {
-      dispatch({
-        type: GET_ERRORS,
-        payload: err.response.data
-      });
+      dispatch(setErrors(err.response.data));
     });
 };
 

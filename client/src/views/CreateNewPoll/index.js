@@ -91,7 +91,6 @@ export class CreateNewPoll extends Component {
       order: answer.order
     };
     this.props.addAnswer(this.state.id, dataSend).then(savedAnswer => {
-      console.log(savedAnswer);
       this.setStateAnswer(savedAnswer);
     });
   };

@@ -12,8 +12,8 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import withStyles from "@material-ui/core/styles/withStyles";
 import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
-
 import { registerUser } from "../../actions/auth";
+import { setErrors } from "../../actions/errors";
 
 export class SignUp extends Component {
   constructor(props) {
@@ -23,6 +23,10 @@ export class SignUp extends Component {
       password: "",
       password2: ""
     };
+  }
+
+  componentDidMount() {
+    this.props.setErrors({});
   }
 
   onChangeInput = e => {
@@ -147,7 +151,8 @@ export class SignUp extends Component {
 SignUp.propTypes = {
   classes: PropTypes.object.isRequired,
   registerUser: PropTypes.func.isRequired,
-  errors: PropTypes.object
+  errors: PropTypes.object,
+  setErrors: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -156,5 +161,8 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { registerUser }
+  {
+    registerUser,
+    setErrors: errors => dispatch => dispatch(setErrors(errors))
+  }
 )(withStyles(dashboardStyle)(SignUp));

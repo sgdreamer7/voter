@@ -1,6 +1,5 @@
 import axios from "axios";
-
-import { GET_ERRORS } from "./types";
+import { setErrors } from "./errors";
 
 export const addAnswer = (poll_id, answerData) => dispatch => {
   return axios
@@ -9,10 +8,7 @@ export const addAnswer = (poll_id, answerData) => dispatch => {
       return res.data;
     })
     .catch(err => {
-      dispatch({
-        type: GET_ERRORS,
-        payload: err.response.data
-      });
+      dispatch(setErrors(err.response.data));
     });
 };
 
@@ -23,10 +19,7 @@ export const editAnswer = (answ_id, data) => dispatch => {
       return res.data;
     })
     .catch(err => {
-      dispatch({
-        type: GET_ERRORS,
-        payload: err.response.data
-      });
+      dispatch(setErrors(err.response.data));
     });
 };
 
@@ -43,9 +36,6 @@ export const vote = answ_id => dispatch => {
       return res.data;
     })
     .catch(err => {
-      dispatch({
-        type: GET_ERRORS,
-        payload: err.response.data
-      });
+      dispatch(setErrors(err.response.data));
     });
 };

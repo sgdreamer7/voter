@@ -1,7 +1,7 @@
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 import store from "../store/configureStore";
-import { refreshToken } from "../actions/auth";
+import { refreshToken, logoutUser } from "../actions/auth";
 
 axios.defaults.baseURL = "http://localhost:5000/api/";
 
@@ -29,6 +29,19 @@ axios.interceptors.request.use(
     }
   },
   error => {
+    return Promise.reject(error);
+  }
+);
+
+axios.interceptors.response.use(
+  function(response) {
+    // Do something with response data
+    return response;
+  },
+  function(error) {
+    if (error.response.status === 401) {
+      return store.dispatch(logoutUser());
+    }
     return Promise.reject(error);
   }
 );
