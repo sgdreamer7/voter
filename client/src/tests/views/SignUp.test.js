@@ -2,14 +2,20 @@ import React from "react";
 import { SignUp } from "../../views/SignUp";
 import { createShallow } from "@material-ui/core/test-utils";
 
-let wrapper, registerUser, errors, classes;
+let wrapper, registerUser, setErrors, errors, classes;
 
 beforeEach(() => {
   registerUser = jest.fn();
+  setErrors = jest.fn();
   errors = {};
   classes = {};
   wrapper = createShallow()(
-    <SignUp registerUser={registerUser} errors={errors} classes={classes} />
+    <SignUp
+      registerUser={registerUser}
+      setErrors={setErrors}
+      errors={errors}
+      classes={classes}
+    />
   );
 });
 

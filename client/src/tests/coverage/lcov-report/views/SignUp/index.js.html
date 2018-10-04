@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">90% </span>
+        <span class="strong">76.92% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>9/10</span>
+        <span class='fraction'>10/13</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">50% </span>
@@ -30,18 +30,18 @@
         <span class='fraction'>3/6</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">80% </span>
+        <span class="strong">62.5% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>4/5</span>
+        <span class='fraction'>5/8</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
+        <span class="strong">90.91% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>9/9</span>
+        <span class='fraction'>10/11</span>
       </div>
     </div>
   </div>
-  <div class='status-line high'></div>
+  <div class='status-line medium'></div>
 <pre><table class="coverage">
 <tr><td class="line-count quiet">1
 2
@@ -203,7 +203,15 @@
 158
 159
 160
-161</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+161
+162
+163
+164
+165
+166
+167
+168
+169</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -228,6 +236,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -355,12 +367,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { Component } from "react";
@@ -377,8 +393,8 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import withStyles from "@material-ui/core/styles/withStyles";
 import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
-&nbsp;
 import { registerUser } from "../../actions/auth";
+import { setErrors } from "../../actions/errors";
 &nbsp;
 export class SignUp extends Component {
   constructor(props) {
@@ -388,6 +404,10 @@ export class SignUp extends Component {
       password: "",
       password2: ""
     };
+  }
+&nbsp;
+  componentDidMount() {
+    this.props.setErrors({});
   }
 &nbsp;
   onChangeInput = e =&gt; {
@@ -512,7 +532,8 @@ export class SignUp extends Component {
 SignUp.propTypes = {
   classes: PropTypes.object.isRequired,
   registerUser: PropTypes.func.isRequired,
-  errors: PropTypes.object
+  errors: PropTypes.object,
+  setErrors: PropTypes.func.isRequired
 };
 &nbsp;
 const mapStateToProps = <span class="fstat-no" title="function not covered" >st</span>ate =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
@@ -521,7 +542,10 @@ const mapStateToProps = <span class="fstat-no" title="function not covered" >st<
 &nbsp;
 export default connect(
   mapStateToProps,
-  { registerUser }
+  {
+    registerUser,
+    setErrors: <span class="fstat-no" title="function not covered" >er</span>rors =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >di</span>spatch =&gt; <span class="cstat-no" title="statement not covered" >dispatch(setErrors(errors))</span></span>
+  }
 )(withStyles(dashboardStyle)(SignUp));
 &nbsp;</pre></td></tr>
 </table></pre>
@@ -529,7 +553,7 @@ export default connect(
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Thu Oct 04 2018 12:28:01 GMT+0300 (Eastern European Summer Time)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Thu Oct 04 2018 14:42:16 GMT+0300 (Eastern European Summer Time)
 </div>
 </div>
 <script src="../../prettify.js"></script>

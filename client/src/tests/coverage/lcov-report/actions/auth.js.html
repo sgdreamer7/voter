@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">88.89% </span>
+        <span class="strong">91.43% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>32/36</span>
+        <span class='fraction'>32/35</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
@@ -35,9 +35,9 @@
         <span class='fraction'>16/19</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">87.1% </span>
+        <span class="strong">90% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>27/31</span>
+        <span class='fraction'>27/30</span>
       </div>
     </div>
   </div>
@@ -115,16 +115,8 @@
 70
 71
 72
-73
-74
-75
-76
-77
-78
-79
-80
-81
-82</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+73</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -146,10 +138,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -163,9 +151,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -179,9 +164,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -208,8 +190,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import axios from "axios";
 import setAuthToken from "../utils/setAuthToken";
 import jwt_decode from "jwt-decode";
-import { GET_ERRORS, SET_CURRENT_USER } from "./types";
+import { SET_CURRENT_USER } from "./types";
 import { push } from "react-router-redux";
+import { setErrors } from "./errors";
 &nbsp;
 const loginAction = (token, dispatch) =&gt; {
   localStorage.setItem("jwtToken", token);
@@ -226,11 +209,7 @@ export const registerUser = userData =&gt; dispatch =&gt; {
       console.log(res.data);
     })
     .catch(<span class="fstat-no" title="function not covered" >er</span>r =&gt; {
-<span class="cstat-no" title="statement not covered" >      console.log(err.response);</span>
-<span class="cstat-no" title="statement not covered" >      dispatch({</span>
-        type: GET_ERRORS,
-        payload: err.response.data
-      });
+<span class="cstat-no" title="statement not covered" >      dispatch(setErrors(err.response.data));</span>
     });
 };
 //Login - Get User Token
@@ -243,10 +222,7 @@ export const loginUser = userData =&gt; dispatch =&gt; {
       loginAction(token, dispatch);
     })
     .catch(<span class="fstat-no" title="function not covered" >er</span>r =&gt; {
-<span class="cstat-no" title="statement not covered" >      dispatch({</span>
-        type: GET_ERRORS,
-        payload: err.response.data
-      });
+<span class="cstat-no" title="statement not covered" >      dispatch(setErrors(err.response.data));</span>
     });
 };
 &nbsp;
@@ -259,10 +235,7 @@ export const verifyEmail = userData =&gt; dispatch =&gt; {
       dispatch(push("/dashboard"));
     })
     .catch(<span class="fstat-no" title="function not covered" >er</span>r =&gt; {
-<span class="cstat-no" title="statement not covered" >      dispatch({</span>
-        type: GET_ERRORS,
-        payload: err.response.data
-      });
+<span class="cstat-no" title="statement not covered" >      dispatch(setErrors(err.response.data));</span>
     });
 };
 &nbsp;
@@ -292,7 +265,7 @@ export const logoutUser = () =&gt; dispatch =&gt; {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Thu Oct 04 2018 12:28:01 GMT+0300 (Eastern European Summer Time)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Thu Oct 04 2018 14:42:16 GMT+0300 (Eastern European Summer Time)
 </div>
 </div>
 <script src="../prettify.js"></script>
