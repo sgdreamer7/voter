@@ -24,7 +24,7 @@ import EditPollModal from "./EditModal";
 import { addPollQuestion, editPollQuestion } from "../../actions/polls";
 import { addAnswer, editAnswer, deleteAnswer } from "../../actions/answers";
 
-class CreateNewPoll extends Component {
+export class CreateNewPoll extends Component {
   state = {
     question: "",
     id: "",
@@ -53,9 +53,7 @@ class CreateNewPoll extends Component {
         }
       },
       () => {
-        if (this.state.isQuestionChanged) {
-          this.delayedCallback(this.onSaveQuestionInput);
-        }
+        this.delayedCallback(this.onSaveQuestionInput);
       }
     );
   };
@@ -93,6 +91,7 @@ class CreateNewPoll extends Component {
       order: answer.order
     };
     this.props.addAnswer(this.state.id, dataSend).then(savedAnswer => {
+      console.log(savedAnswer);
       this.setStateAnswer(savedAnswer);
     });
   };
@@ -102,6 +101,7 @@ class CreateNewPoll extends Component {
       prevState => {
         let answers = prevState.answers.map(item => ({ ...item }));
         answers[prevState.currentEditAnswerIndex] = answer;
+
         return {
           answers
         };

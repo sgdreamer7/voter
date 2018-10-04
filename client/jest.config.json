@@ -1,4 +1,12 @@
 {
   "setupFiles": ["raf/polyfill", "<rootDir>/src/tests/setupTests.js"],
-  "testURL": "http://localhost/"
+  "testURL": "http://localhost/",
+  "collectCoverage": true,
+  "coverageDirectory": "src/tests/coverage",
+  "coveragePathIgnorePatterns": [
+    "/node_modules/",
+    "/src/tests/setupTests.js",
+    "/src/tests/fixtures/",
+    "/src/tests/coverage/"
+  ]
 }

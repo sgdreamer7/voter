@@ -22,6 +22,10 @@ export const addPollQuestion = question => dispatch => {
         type: ADD_POLL,
         payload: res.data
       });
+      dispatch({
+        type: GET_ERRORS,
+        payload: {}
+      });
       return res.data;
     })
     .catch(err => {
