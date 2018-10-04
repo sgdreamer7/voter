@@ -1,7 +1,7 @@
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 import store from "../store/configureStore";
-import { refreshToken, logoutUser } from "../actions/auth";
+import { refreshToken } from "../actions/auth";
 
 axios.defaults.baseURL = "http://localhost:5000/api/";
 

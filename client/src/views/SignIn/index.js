@@ -15,7 +15,7 @@ import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardS
 
 import { loginUser } from "../../actions/auth";
 
-class SignIn extends Component {
+export class SignIn extends Component {
   constructor(props) {
     super(props);
     this.state = {
