@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import { SET_POLLS, ADD_POLL, EDIT_POLL } from "../actions/types";
 
 export default (state = [], action) => {

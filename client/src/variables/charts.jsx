@@ -130,10 +130,6 @@ const emailsSubscriptionChart = {
   }
 };
 
-// ##############################
-// // // Completed Tasks
-// #############################
-
 const completedTasksChart = {
   data: {
     labels: ["12am", "3pm", "6pm", "9pm", "12pm", "3am", "6am", "9am"],

@@ -12,20 +12,16 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import withStyles from "@material-ui/core/styles/withStyles";
 import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
-import { setErrors } from "../../actions/errors";
+
 import { loginUser } from "../../actions/auth";
 
-export class SignIn extends Component {
+class SignIn extends Component {
   constructor(props) {
     super(props);
     this.state = {
       email: "",
       password: ""
     };
-  }
-
-  componentDidMount() {
-    this.props.setErrors({});
   }
 
   onChangeInput = e => {
@@ -78,7 +74,7 @@ export class SignIn extends Component {
                   className={classes.textField}
                   value={this.state.email}
                   onChange={this.onChangeInput}
-                  error={!!this.props.errors.email}
+                  error={this.props.errors.email}
                   type="email"
                   name="email"
                   margin="normal"
@@ -93,7 +89,7 @@ export class SignIn extends Component {
                   type="password"
                   name="password"
                   margin="normal"
-                  error={!!this.props.errors.password}
+                  error={this.props.errors.password}
                   value={this.state.password}
                   onChange={this.onChangeInput}
                 />
@@ -124,7 +120,7 @@ export class SignIn extends Component {
                 </Button>
               </div>
             </form>
-            <Link to="/signUp">first time user? sign-up</Link>
+            <Link to="/signUp">First time user? sign-up</Link>
           </CardBody>
         </Card>
       </div>
@@ -134,8 +130,7 @@ export class SignIn extends Component {
 SignIn.propTypes = {
   classes: PropTypes.object.isRequired,
   errors: PropTypes.object,
-  loginUser: PropTypes.func.isRequired,
-  setErrors: PropTypes.func.isRequired
+  loginUser: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -144,5 +139,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { loginUser, setErrors: errors => dispatch => dispatch(setErrors(errors)) }
+  { loginUser }
 )(withStyles(dashboardStyle)(SignIn));

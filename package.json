@@ -1,7 +1,7 @@
 {
   "name": "voter",
   "version": "1.0.0",
-  "description": "",
+  "description": "Coded by Mark Zavgorodniy",
   "main": "server.js",
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -26,16 +26,16 @@
     "start": "node server.js",
     "server": "nodemon server.js",
     "client": "npm start --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "app": "concurrently \"npm run server\" \"npm run client\""
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Karine91/voter.git"
+    "url": "git+https://github.com/mrzavgorodniy/voter.git"
   },
-  "author": "",
+  "author": "Mark Zavgorodniy",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Karine91/voter/issues"
+    "url": "https://github.com/mrzavgorodniy/voter/issues"
   },
-  "homepage": "https://github.com/Karine91/voter#readme"
+  "homepage": "https://github.com/mrzavgorodniy/voter#readme"
 }

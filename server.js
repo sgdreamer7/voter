@@ -13,27 +13,22 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-//DB Config
 const db = require("./config/keys").mongoURI;
 
-//Connect to MongoDB
 mongoose
   .connect(
     db,
     { useNewUrlParser: true }
   )
-  .then(() => console.log("Mongoose Connected"))
-  .catch(err => console.log(err));
+  .then(() => console.log("Mongoose Connected"));
 
-//Passport middleware
 app.use(passport.initialize());
 
-//Passport config
 require("./config/passport.js")(passport);
 
 app.use(cors());
 
-//Use Routes
+//роуты
 app.use("/api/users", users);
 app.use("/api/polls", polls);
 app.use("/api/answers", answers);

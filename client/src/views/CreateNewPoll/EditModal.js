@@ -55,7 +55,7 @@ class EditPoll extends Component {
       background: "#fff",
       border: "1px solid #ccc",
       padding: "20px",
-      width: "500px"
+      width: "800px"
     };
 
     return (
@@ -73,7 +73,7 @@ class EditPoll extends Component {
               margin: "20px 0"
             }}
           >
-            Create answer
+            Answer
           </Typography>
 
           <TextField
@@ -98,10 +98,10 @@ class EditPoll extends Component {
               justifyContent: "space-between"
             }}
           >
-            <Button color="info" onClick={this.props.handleClose}>
+            <Button color="warning" onClick={this.props.handleClose}>
               Cancel
             </Button>
-            <Button color="success" onClick={this.saveAnswer}>
+            <Button color="primary" onClick={this.saveAnswer}>
               {this.state.answer._id ? "EDIT" : "SAVE"}
             </Button>
           </div>

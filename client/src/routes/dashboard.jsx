@@ -1,6 +1,6 @@
 // @material-ui/icons
 import Dashboard from "@material-ui/icons/Dashboard";
-import InsertDriveFile from "@material-ui/icons/InsertDriveFile";
+import BubbleChart from "@material-ui/icons/BubbleChart";
 // core components/views
 import DashboardPage from "../views/Dashboard/Dashboard.jsx";
 import CreateNewPoll from "../views/CreateNewPoll";
@@ -18,14 +18,14 @@ const dashboardRoutes = [
     path: "/poll",
     sidebarName: "Poll",
     navbarName: "Poll",
-    icon: InsertDriveFile,
+    icon: "content_paste",
     component: Poll
   },
   {
     path: "/create",
     sidebarName: "Create",
     navbarName: "Create",
-    icon: InsertDriveFile,
+    icon: BubbleChart,
     component: CreateNewPoll
   },
   { redirect: true, path: "/", to: "/dashboard", navbarName: "Redirect" }

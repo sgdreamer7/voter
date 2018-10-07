@@ -50,7 +50,7 @@ router.post("/signup", (req, res) => {
                 );
                 return res.status(200).json({ success: true });
               })
-              .catch(err => res.json({ error: err }));
+              .catch(err => console.log(err));
           });
         });
       }
@@ -104,7 +104,7 @@ router.post("/signin", (req, res) => {
           return res.status(400).json(errors);
         }
       })
-      .catch(err => res.json({ error: err }));
+      .catch(err => console.log(err));
   });
 });
 
@@ -140,7 +140,7 @@ router.post("/verifyEmail", (req, res) => {
         return res.status(400).json(errors);
       }
     })
-    .catch(err => res.json({ error: err }));
+    .catch(err => res.json(err));
 });
 
 router.post("/refreshToken", (req, res) => {

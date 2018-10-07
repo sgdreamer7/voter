@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
@@ -103,9 +104,7 @@ class Poll extends Component {
             >
               This is poll results
             </Typography>
-            <p className="form__subtitle">
-              Please, choose your answer if you have not yet
-            </p>
+            <p className="form__subtitle">Please, choose your answer</p>
           </CardHeader>
           <CardBody
             style={{

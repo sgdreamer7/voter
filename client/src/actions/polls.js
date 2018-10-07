@@ -1,10 +1,9 @@
 import axios from "axios";
 
-import { SET_POLLS, ADD_POLL, EDIT_POLL } from "./types";
-import { setErrors } from "./errors";
+import { SET_POLLS, ADD_POLL, EDIT_POLL, GET_ERRORS } from "./types";
 
 export const getPolls = () => dispatch => {
-  return axios
+  axios
     .get("polls")
     .then(res => {
       dispatch({
@@ -12,7 +11,7 @@ export const getPolls = () => dispatch => {
         payload: res.data
       });
     })
-    .catch(err => console.log(err));
+    .catch(err => global.console.log(err));
 };
 
 export const addPollQuestion = question => dispatch => {
@@ -23,11 +22,13 @@ export const addPollQuestion = question => dispatch => {
         type: ADD_POLL,
         payload: res.data
       });
-      dispatch(setErrors({}));
       return res.data;
     })
     .catch(err => {
-      dispatch(setErrors(err.response.data));
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      });
     });
 };
 
@@ -42,7 +43,10 @@ export const editPollQuestion = ({ question, id }) => dispatch => {
       });
     })
     .catch(err => {
-      dispatch(setErrors(err.response.data));
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      });
     });
 };
 
@@ -52,5 +56,5 @@ export const getPollById = id => () => {
     .then(res => {
       return res.data;
     })
-    .catch(err => console.log(err));
+    .catch(err => global.console.log(err));
 };
